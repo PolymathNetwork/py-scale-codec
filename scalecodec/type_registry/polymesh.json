@@ -54,7 +54,7 @@
         ["Group", "Vec<IdentityId>"]
       ]
     },
-    "AccountKey": "[u8;32]",
+    "AccountKey": "[u8; 32]",
     "Permission": {
       "type": "enum",
       "value_list": ["Full", "Admin", "Operator", "SpendFunds"]
@@ -419,7 +419,7 @@
       "type": "enum",
       "value_list": ["Valid", "Invalid", "ForceValid"]
     },
-    "Memo": "[u8;32]",
+    "Memo": "[u8; 32]",
     "IssueRecipient": {
       "type": "enum",
       "type_mapping": [

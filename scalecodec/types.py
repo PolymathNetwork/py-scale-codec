@@ -452,7 +452,7 @@ class VecU8Length16(ScaleType):
             raise ValueError('Value should start with "0x" and should be 16 bytes long')
         return ScaleBytes(value)
 
-class VecU8Length16(ScaleType):
+class VecU8Length12(ScaleType):
     type_string = '[u8; 12]'
 
     def process(self):
