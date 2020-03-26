@@ -452,6 +452,7 @@ class VecU8Length16(ScaleType):
             raise ValueError('Value should start with "0x" and should be 16 bytes long')
         return ScaleBytes(value)
 
+
 class VecU8Length12(ScaleType):
     type_string = '[u8; 12]'
 
@@ -466,6 +467,7 @@ class VecU8Length12(ScaleType):
         if value[0:2] != '0x' and len(value) == 26:
             raise ValueError('Value should start with "0x" and should be 12 bytes long')
         return ScaleBytes(value)
+
 
 class VecU8Length8(ScaleType):
     type_string = '[u8; 8]'
@@ -816,6 +818,10 @@ class ParaId(U32):
 
 
 class Key(Bytes):
+    pass
+
+
+class Ticker(VecU8Length12):
     pass
 
 
