@@ -2,9 +2,9 @@
   "types": {
     "IdentityId": "H256",
     "Ticker": "[u8; 12]",
-    "DocumentName": "Text",
-    "DocumentUri": "Text",
-    "DocumentHash": "Text",
+    "DocumentName": "Vec<u8>",
+    "DocumentUri": "Vec<u8>",
+    "DocumentHash": "Vec<u8>",
     "Document": {
       "type": "struct",
       "type_mapping": [
@@ -31,9 +31,9 @@
         ["Custom", "Vec<u8>"]
       ]
     },
-    "TokenName": "Text",
-    "AssetIdentifier": "Text",
-    "FundingRoundName": "Text",
+    "TokenName": "Vec<u8>",
+    "AssetIdentifier": "Vec<u8>",
+    "FundingRoundName": "Vec<u8>",
     "SecurityToken": {
       "type": "struct",
       "type_mapping": [
@@ -129,7 +129,7 @@
         ["signing_items", "Vec<SigningItem>"]
       ]
     },
-    "JurisdictionName": "Text",
+    "JurisdictionName": "Vec<u8>",
     "Scope": "IdentityId",
     "Claim": {
       "type": "enum",
@@ -276,8 +276,8 @@
         ["nonce", "u16"]
       ]
     },
-    "MotionTitle": "Text",
-    "MotionInfoLink": "Text",
+    "MotionTitle": "Vec<u8>",
+    "MotionInfoLink": "Vec<u8>",
     "Motion": {
       "type": "struct",
       "type_mapping": [
@@ -295,8 +295,8 @@
         ["motions", "Vec<Motion>"]
       ]
     },
-    "Url": "Text",
-    "MipDescription": "Text",
+    "Url": "Vec<u8>",
+    "MipDescription": "Vec<u8>",
     "MipsMetadata": {
       "type": "struct",
       "type_mapping": [
@@ -390,7 +390,7 @@
         ["Custom", "Vec<u8>"]
       ]
     },
-    "SmartExtensionName": "Text",
+    "SmartExtensionName": "Vec<u8>",
     "SmartExtension": {
       "type": "struct",
       "type_mapping": [
