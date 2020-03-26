@@ -10,9 +10,7 @@
       "type_mapping": [
         ["name", "DocumentName"],
         ["uri", "DocumentUri"],
-        ["content_hash", "content_hash"],
-        ["granularity", "u128"],
-        ["decimals", "u16"]
+        ["content_hash", "DocumentHash"]
       ]
     },
     "AssetType": {
