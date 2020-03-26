@@ -1,7 +1,7 @@
 {
   "types": {
     "IdentityId": "H256",
-    "Ticker": "VecU8Length12",
+    "Ticker": "[u8; 32]",
     "DocumentName": "Vec<u8>",
     "DocumentUri": "Vec<u8>",
     "DocumentHash": "Vec<u8>",
