@@ -821,10 +821,6 @@ class Key(Bytes):
     pass
 
 
-class Ticker(VecU8Length12):
-    pass
-
-
 class KeyValue(Struct):
     type_string = '(Vec<u8>, Vec<u8>)'
     type_mapping = (('key', 'Vec<u8>'), ('value', 'Vec<u8>'))
