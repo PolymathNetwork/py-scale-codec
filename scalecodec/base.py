@@ -235,7 +235,7 @@ class ScaleDecoder(ABC):
     def decode(self, check_remaining=True):
         self.value = self.process()
 
-        if check_remaining and self.data.offset != self.data.length:
+        if check_remaining and self.data.offset < self.data.length:
             raise RemainingScaleBytesNotEmptyException('Current offset: {} / length: {}'.format(self.data.offset, self.data.length))
 
         return self.value

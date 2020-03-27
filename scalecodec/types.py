@@ -30,6 +30,9 @@ class Compact(ScaleType):
 
     def process_compact_bytes(self):
         compact_byte = self.get_next_bytes(1)
+        if compact_byte == b'':
+            self.compact_bytes = compact_byte
+            return self.compact_bytes
         try:
             byte_mod = compact_byte[0] % 4
         except IndexError:
@@ -1938,4 +1941,3 @@ class Call(ScaleType):
                     data += arg_obj.encode(param_value)
 
         return data
-
