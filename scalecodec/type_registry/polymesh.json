@@ -2,6 +2,7 @@
   "types": {
     "IdentityId": "H256",
     "Ticker": "[u8; 12]",
+    "PosRatio": "(u32, u32)",
     "DocumentName": "String",
     "DocumentUri": "String",
     "DocumentHash": "String",
@@ -26,9 +27,9 @@
     "IdentifierType": {
       "type": "enum",
       "type_mapping": [
-        ["Isin", "Null"],
+        ["Cins", "Null"],
         ["Cusip", "Null"],
-        ["Custom", "Vec<u8>"]
+        ["Isin", "Null"]
       ]
     },
     "TokenName": "String",
@@ -305,7 +306,15 @@
         ["end", "u32"],
         ["proposal_hash", "Hash"],
         ["url", "Option<Url>"],
-        ["description", "Option<MipDescription>"]
+        ["description", "Option<MipDescription>"],
+        ["cool_off_until", "u32"]
+      ]
+    },
+    "DepositInfo": {
+      "type": "struct",
+      "type_mapping": [
+        ["owner", "AccountKey"],
+        ["amount", "Balance"]
       ]
     },
     "PolymeshVotes": {
@@ -491,6 +500,24 @@
         ["id", "IdentityId"],
         ["deactivated_at", "Moment"],
         ["expiry", "Option<Moment>"]
+      ]
+    },
+    "ProtocolOp": {
+      "type": "enum",
+      "value_list": [
+        "AssetRegisterTicker",
+        "AssetIssue",
+        "AssetAddDocument",
+        "AssetCreateToken",
+        "DividendNew",
+        "GeneralTmAddActiveRule",
+        "IdentityRegisterDid",
+        "IdentityCddRegisterDid",
+        "IdentityAddClaim",
+        "IdentitySetMasterKey",
+        "IdentityAddSigningItem",
+        "MipsPropose",
+        "VotingAddBallot"
       ]
     }
   }
