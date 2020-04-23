@@ -1,10 +1,116 @@
 {
   "types": {
+    "AccountVoteSplit": {
+      "type": "struct",
+      "type_mapping": [
+        ["aye", "Balance"],
+        ["nay", "Balance"]
+      ]
+    },
+    "AccountVoteStandard": {
+      "type": "struct",
+      "type_mapping": [
+        ["vote", "Vote"],
+        ["balance", "Balance"]
+      ]
+    },
+    "AccountVote": {
+      "type": "enum",
+      "type_mapping": [
+        ["Standard", "AccountVoteStandard"],
+        ["Split", "AccountVoteSplit"]
+      ]
+    },
+    "Delegations": {
+      "type": "struct",
+      "type_mapping": [
+        ["votes", "Balance"],
+        ["capital", "Balance"]
+      ]
+    },
+    "PriorLock": {
+      "type": "struct",
+      "type_mapping": [
+        ["blockNumber", "BlockNumber"],
+        ["balance", "Balance"]
+      ]
+    },
+    "ReferendumInfoFinished": {
+      "type": "struct",
+      "type_mapping": [
+        ["approved", "bool"],
+        ["end", "BlockNumber"]
+      ]
+    },
+    "Tally": {
+      "type": "struct",
+      "type_mapping": [
+        ["ayes", "Balance"],
+        ["nays", "Balance"],
+        ["turnout", "Balance"]
+      ]
+    },
+    "ReferendumStatus": {
+      "type": "struct",
+      "type_mapping": [
+        ["end", "BlockNumber"],
+        ["proposalHash", "Hash"],
+        ["threshold", "VoteThreshold"],
+        ["delay", "BlockNumber"],
+        ["tally", "Tally"]
+      ]
+    },
+    "ReferendumInfo": {
+      "type": "enum",
+      "type_mapping": [
+        ["Ongoing", "ReferendumStatus"],
+        ["Finished", "ReferendumInfoFinished"]
+      ]
+    },
+    "VotingDirectVote": {
+      "type": "struct",
+      "type_mapping": [
+        ["referendumIndex", "ReferendumIndex"],
+        ["accountVote", "AccountVote"]
+      ]
+    },
+    "VotingDirect": {
+      "type": "struct",
+      "type_mapping": [
+        ["votes", "Vec<VotingDirectVote>"],
+        ["delegations", "Delegations"],
+        ["prior", "PriorLock"]
+      ]
+    },
+    "VotingDelegating": {
+      "type": "struct",
+      "type_mapping": [
+        ["balance", "Balance"],
+        ["target", "AccountId"],
+        ["conviction", "Conviction"],
+        ["delegations", "Delegations"],
+        ["prior", "PriorLock"]
+      ]
+    },
+    "Voting": {
+      "type": "enum",
+      "type_mapping": [
+        ["Direct", "VotingDirect"],
+        ["Delegating", "VotingDelegating"]
+      ]
+    },
     "(AccountId, Balance)": {
       "type": "struct",
       "type_mapping": [
         ["account", "AccountId"],
         ["balance", "Balance"]
+      ]
+    },
+    "(BalanceOf<T, I>, BidKind<AccountId, BalanceOf<T, I>>)": {
+      "type": "struct",
+      "type_mapping": [
+        ["balance", "Balance"],
+        ["bidkind", "BidKind"]
       ]
     },
     "RefCount": "u8",
@@ -67,8 +173,7 @@
       "type_mapping": [
         ["id", "LockIdentifier"],
         ["amount", "Balance"],
-        ["until", "BlockNumber"],
-        ["reasons", "WithdrawReasons"]
+        ["reasons", "Reasons"]
       ]
     },
     "FullIdentification": {
@@ -133,7 +238,7 @@
     },
     "DispatchClass": {
       "type": "enum",
-      "value_list": ["Normal", "Operational"]
+      "value_list": ["Normal", "Operational", "Mandatory"]
     },
     "DispatchInfo": {
       "type": "struct",
@@ -249,7 +354,7 @@
     "PhantomData": "Null",
     "sp_std::marker::PhantomData<(AccountId, Event)>": "PhantomData",
     "Reporter": "AccountId",
-    "OffenceDetails<AccountId, IdentificationTuple>": {
+    "OffenceDetails": {
       "type": "struct",
       "type_mapping": [
         ["offender", "Offender"],
@@ -384,7 +489,8 @@
         ["stash", "AccountId"],
         ["total", "Compact<Balance>"],
         ["active", "Compact<Balance>"],
-        ["unlocking", "Vec<UnlockChunk<Balance>>"]
+        ["unlocking", "Vec<UnlockChunk<Balance>>"],
+        ["lastReward", "Option<EraIndex>"]
       ]
     },
     "SubId": "u32",
@@ -490,6 +596,7 @@
       "type_mapping": [
         ["spanIndex", "SpanIndex"],
         ["lastStart", "EraIndex"],
+        ["lastNonzeroSlash", "EraIndex"],
         ["prior", "Vec<EraIndex>"]
       ]
     },
@@ -585,6 +692,7 @@
       ]
     },
     "BidKind<AccountId,Balance>": "Bidkind",
+    "BidKind<AccountId, BalanceOf<T, I>>": "Bidkind",
     "Bid": {
       "type": "struct",
       "type_mapping": [
@@ -642,6 +750,13 @@
         ["Deploy", "IncomingParachainDeploy"]
       ]
     },
+    "LastRuntimeUpgradeInfo": {
+      "type": "struct",
+      "type_mapping": [
+        ["specVersion", "Compact<u32>"],
+        ["specName", "Bytes"]
+      ]
+    },
     "ProxyState": {
       "type": "struct",
       "type_mapping": [
@@ -683,6 +798,155 @@
         ["locked", "Balance"],
         ["perBlock", "Balance"],
         ["startingBlock", "BlockNumber"]
+      ]
+    },
+    "CompactScore": {
+      "type": "struct",
+      "type_mapping": [
+        ["accountId", "AccountId"],
+        ["score", "u128"]
+      ]
+    },
+    "CompactAssignmentsVote": {
+      "type": "struct",
+      "type_mapping": [
+        ["accountId1", "AccountId"],
+        ["scores", "Vec<CompactScore>"],
+        ["accountId2", "AccountId"]
+      ]
+    },
+    "CompactAssignments": {
+      "type": "struct",
+      "type_mapping": [
+        ["votes1", "Vec<CompactAssignmentsVote>"],
+        ["votes2", "Vec<CompactAssignmentsVote>"],
+        ["votes3", "Vec<CompactAssignmentsVote>"],
+        ["votes4", "Vec<CompactAssignmentsVote>"],
+        ["votes5", "Vec<CompactAssignmentsVote>"],
+        ["votes6", "Vec<CompactAssignmentsVote>"],
+        ["votes7", "Vec<CompactAssignmentsVote>"],
+        ["votes8", "Vec<CompactAssignmentsVote>"],
+        ["votes9", "Vec<CompactAssignmentsVote>"],
+        ["votes10", "Vec<CompactAssignmentsVote>"],
+        ["votes11", "Vec<CompactAssignmentsVote>"],
+        ["votes12", "Vec<CompactAssignmentsVote>"],
+        ["votes13", "Vec<CompactAssignmentsVote>"],
+        ["votes14", "Vec<CompactAssignmentsVote>"],
+        ["votes15", "Vec<CompactAssignmentsVote>"],
+        ["votes16", "Vec<CompactAssignmentsVote>"]
+      ]
+    },
+    "DeferredOffenceOf": {
+      "type": "struct",
+      "type_mapping": [
+        ["offences", "Vec<OffenceDetails>"],
+        ["perc", "Vec<Perbill>"],
+        ["session", "SessionIndex"]
+      ]
+    },
+    "Statement": {
+      "type": "enum",
+      "type_mapping": [
+        ["Never", "Null"],
+        ["Candidate", "Hash"],
+        ["Valid", "Hash"],
+        ["Invalid", "Hash"]
+      ]
+    },
+    "ValidatorSignature": "Signature",
+    "DoubleVoteReportStatement": {
+      "type": "struct",
+      "type_mapping": [
+        ["statement", "Statement"],
+        ["signature", "ValidatorSignature"]
+      ]
+    },
+    "DoubleVoteReportProof": {
+      "type": "struct",
+      "type_mapping": [
+        ["session", "SessionIndex"],
+        ["trieNodes", "Vec<Bytes>"]
+      ]
+    },
+    "SigningContext": {
+      "type": "struct",
+      "type_mapping": [
+        ["sessionIndex", "SessionIndex"],
+        ["parentHash", "Hash"]
+      ]
+    },
+    "DoubleVoteReport": {
+      "type": "struct",
+      "type_mapping": [
+        ["identity", "ValidatorId"],
+        ["first", "DoubleVoteReportStatement"],
+        ["second", "DoubleVoteReportStatement"],
+        ["proof", "DoubleVoteReportProof"],
+        ["signingContext", "SigningContext"]
+      ]
+    },
+    "ElectionCompute": {
+      "type": "enum",
+      "value_list": ["OnChain", "Signed", "Authority"]
+    },
+    "ElectionResult": {
+      "type": "struct",
+      "type_mapping": [
+        ["compute", "ElectionCompute"],
+        ["slotStake", "Balance"],
+        ["electedStashes", "Vec<AccountId>"],
+        ["exposures", "Vec<(AccountId, Exposure)>"]
+      ]
+    },
+    "ElectionStatus": {
+      "type": "enum",
+      "type_mapping": [
+        ["Close", "Null"],
+        ["Open", "BlockNumber"]
+      ]
+    },
+    "Phase": {
+      "type": "enum",
+      "type_mapping": [
+        ["ApplyExtrinsic", "u32"],
+        ["Finalization", "Null"],
+        ["Initialization", "Null"]
+      ]
+    },
+    "PhragmenScore": "[u128; 3]",
+    "PreimageStatusAvailable": {
+      "type": "struct",
+      "type_mapping": [
+        ["data", "Bytes"],
+        ["provider", "AccountId"],
+        ["deposit", "Balance"],
+        ["since", "BlockNumber"],
+        ["expiry", "Option<BlockNumber>"]
+      ]
+    },
+    "PreimageStatus": {
+      "type": "enum",
+      "type_mapping": [
+        ["Missing", "BlockNumber"],
+        ["Available", "PreimageStatusAvailable"]
+      ]
+    },
+    "schnorrkel::Randomness": "Hash",
+    "schnorrkel::RawVRFOutput": "[u8; 32]",
+    "TaskAddress": {
+      "type": "struct",
+      "type_mapping": [
+        ["blockNumber", "BlockNumber"],
+        ["index", "u32"]
+      ]
+    },
+    "ValidationCode": "Bytes",
+    "ValidatorIndex": "u16",
+    "ParaPastCodeMeta": {
+      "type": "struct",
+      "type_mapping": [
+        ["upgrade_times", "Vec<BlockNumber>"],
+        ["last_pruned", "Option<BlockNumber>"]
       ]
     }
   }

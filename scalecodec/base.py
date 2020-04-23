@@ -44,8 +44,24 @@ class RuntimeConfiguration(metaclass=Singleton):
         self.active_spec_version_id = None
 
     def get_decoder_class(self, type_string, spec_version_id='default'):
-        # TODO move ScaleDecoder.get_decoder_class logic to here
-        return self.type_registry.get('types', {}).get(type_string.lower(), None)
+
+        decoder_class = self.type_registry.get('types', {}).get(type_string.lower(), None)
+
+        if not decoder_class and type_string[-1:] == '>':
+
+            # Extract sub types
+            type_parts = re.match(r'^([^<]*)<(.+)>$', type_string)
+
+            if type_parts:
+                type_parts = type_parts.groups()
+
+            if type_parts:
+                # Create dynamic class for Part1<Part2> based on Part1 and set class variable Part2 as sub_type
+                base_class = self.type_registry.get('types', {}).get(type_parts[0].lower(), None)
+                if base_class:
+                    decoder_class = type(type_string, (base_class,), {'sub_type': type_parts[1]})
+
+        return decoder_class
 
     def clear_type_registry(self):
         self.type_registry = {'types': {cls.type_string.lower(): cls for cls in self.all_subclasses(ScaleDecoder) if
@@ -170,12 +186,15 @@ class ScaleDecoder(ABC):
 
     debug = False
 
+    sub_type = None
+
     PRIMITIVES = ('bool', 'u8', 'u16', 'u32', 'u64', 'u128', 'u256', 'i8', 'i16', 'i32', 'i64', 'i128', 'i256', 'h160',
                   'h256', 'h512', '[u8; 4]', '[u8; 4]', '[u8; 8]', '[u8; 12]', '[u8; 16]', '[u8; 32]', '&[u8]')
 
     def __init__(self, data, sub_type=None):
 
-        self.sub_type = sub_type
+        if sub_type:
+            self.sub_type = sub_type
 
         if self.type_mapping is None and self.type_string:
             self.build_type_mapping()
@@ -237,6 +256,10 @@ class ScaleDecoder(ABC):
 
         if check_remaining and self.data.offset < self.data.length:
             raise RemainingScaleBytesNotEmptyException('Current offset: {} / length: {}'.format(self.data.offset, self.data.length))
+
+        if self.data.offset > self.data.length:
+            raise RemainingScaleBytesNotEmptyException(
+                'No more bytes available (offset: {} / length: {})'.format(self.data.offset, self.data.length))
 
         return self.value
 
