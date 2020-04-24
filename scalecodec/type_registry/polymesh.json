@@ -304,7 +304,6 @@
         ["proposer", "AccountKey"],
         ["index", "u32"],
         ["end", "u32"],
-        ["proposal_hash", "Hash"],
         ["url", "Option<Url>"],
         ["description", "Option<MipDescription>"],
         ["cool_off_until", "u32"]
@@ -326,23 +325,39 @@
       ]
     },
     "MipsIndex": "u32",
-    "MipsPriority": {
+    "ProposalState": {
       "type": "enum",
-      "value_list": ["High", "Normal"]
+      "value_list": [
+        "Proposed",
+        "Cancelled",
+        "Killed",
+        "Referendum",
+        "Rejected"
+      ]
+    },
+    "MipsState": {
+      "type": "enum",
+      "value_list": ["Pending", "Scheduled", "Rejected", "Failed", "Executed"]
+    },
+    "ReferendumType": {
+      "type": "enum",
+      "value_list": ["FastTracked", "Emergency", "Community"]
     },
     "MIP": {
       "type": "struct",
       "type_mapping": [
         ["index", "MipsIndex"],
-        ["proposal", "Call"]
+        ["proposal", "Call"],
+        ["state", "ProposalState"]
       ]
     },
-    "PolymeshReferendumInfo": {
+    "Referendum": {
       "type": "struct",
       "type_mapping": [
         ["index", "MipsIndex"],
-        ["priority", "MipsPriority"],
-        ["proposal_hash", "Hash"]
+        ["state", "ReferendumState"],
+        ["referendum_type", "ReferendumType"],
+        ["enactment_period", "u32"]
       ]
     },
     "TickerTransferApproval": {
@@ -520,5 +535,48 @@
         "VotingAddBallot"
       ]
     }
-  }
+  },
+  "CddStatus": {
+    "type": "enum",
+    "type_mapping": [
+      ["Ok", "IdentityId"],
+      ["Err", "Vec<u8>"]
+    ]
+  },
+  "AssetDidResult": {
+    "type": "enum",
+    "type_mapping": [
+      ["Ok", "IdentityId"],
+      ["Err", "Vec<u8>"]
+    ]
+  },
+  "DidRecordsSuccess": {
+    "type": "struct",
+    "type_mapping": [
+      ["master_key", "AccountKey"],
+      ["signing_items", "Vec<SigningItem>"]
+    ]
+  },
+  "DidRecords": {
+    "type": "enum",
+    "type_mapping": [
+      ["Success", "DidRecordsSuccess"],
+      ["IdNotFound", "Vec<u8>"]
+    ]
+  },
+  "CappedVoteCountSuccess": {
+    "type": "struct",
+    "type_mapping": [
+      ["ayes", "u64"],
+      ["nays", "u64"]
+    ]
+  },
+  "CappedVoteCount": {
+    "type": "enum",
+    "type_mapping": [
+      ["Success", "CappedVoteCountSuccess"],
+      ["ProposalNotFound", "Vec<u8>"]
+    ]
+  },
+  "Weight": "u32"
 }
