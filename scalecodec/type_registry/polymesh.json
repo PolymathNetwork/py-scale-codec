@@ -597,7 +597,7 @@
     ]
   },
   "Weight": "u32",
-  "BlockNumber": "u64",
+  "BlockNumber": "u32",
   "BridgeTxStatus": {
     "type": "enum",
     "type_mapping": [
