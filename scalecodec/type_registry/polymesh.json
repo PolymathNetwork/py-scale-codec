@@ -597,15 +597,6 @@
     ]
   },
   "Weight": "u32",
-  "BridgeTxDetail": {
-    "type": "struct",
-    "type_mapping": [
-      ["amount", "Balance"],
-      ["status", "BridgeTxStatus"],
-      ["execution_block", "BlockNumber"],
-      ["tx_hash", "H256"]
-    ]
-  },
   "BridgeTxStatus": {
     "type": "enum",
     "type_mapping": [
@@ -614,6 +605,15 @@
       ["Frozen", "Null"],
       ["Timelocked", "Null"],
       ["Handled", "Null"]
+    ]
+  },
+  "BridgeTxDetail": {
+    "type": "struct",
+    "type_mapping": [
+      ["amount", "Balance"],
+      ["status", "BridgeTxStatus"],
+      ["execution_block", "BlockNumber"],
+      ["tx_hash", "H256"]
     ]
   },
   "CappedFee": "u64"
