@@ -139,7 +139,7 @@
         ["start", "Option<Moment>"]
       ]
     },
-    "BlockNumber": "U64",
+    "BlockNumber": "U32",
     "CandidateReceipt": {
       "type": "struct",
       "type_mapping": [
