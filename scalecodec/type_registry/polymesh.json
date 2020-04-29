@@ -304,16 +304,24 @@
       ]
     },
     "Url": "String",
-    "MipDescription": "String",
-    "MipsMetadata": {
+    "Beneficiary": {
+      "type": "struct",
+      "type_mapping": [
+        ["id", "IdentityId"],
+        ["amount", "Balance"]
+      ]
+    },
+    "PipDescription": "String",
+    "PipsMetadata": {
       "type": "struct",
       "type_mapping": [
         ["proposer", "AccountKey"],
-        ["index", "u32"],
+        ["id", "PipId"],
         ["end", "u32"],
         ["url", "Option<Url>"],
-        ["description", "Option<MipDescription>"],
-        ["cool_off_until", "u32"]
+        ["description", "Option<PipDescription>"],
+        ["cool_off_until", "u32"],
+        ["beneficiaries", "Vec<Beneficiary>"]
       ]
     },
     "DepositInfo": {
@@ -331,16 +339,10 @@
         ["nays", "Vec<(IdentityId, Balance)>"]
       ]
     },
-    "MipsIndex": "u32",
+    "PipId": "u32",
     "ProposalState": {
       "type": "enum",
-      "value_list": [
-        "Proposed",
-        "Cancelled",
-        "Killed",
-        "Referendum",
-        "Rejected"
-      ]
+      "value_list": ["Pending", "Cancelled", "Killed", "Rejected", "Referendum"]
     },
     "ReferendumState": {
       "type": "enum",
@@ -350,10 +352,10 @@
       "type": "enum",
       "value_list": ["FastTracked", "Emergency", "Community"]
     },
-    "MIP": {
+    "PIP": {
       "type": "struct",
       "type_mapping": [
-        ["index", "MipsIndex"],
+        ["id", "PipId"],
         ["proposal", "Call"],
         ["state", "ProposalState"]
       ]
@@ -361,7 +363,7 @@
     "Referendum": {
       "type": "struct",
       "type_mapping": [
-        ["index", "MipsIndex"],
+        ["id", "PipId"],
         ["state", "ReferendumState"],
         ["referendum_type", "ReferendumType"],
         ["enactment_period", "u32"]
@@ -459,9 +461,9 @@
     "BridgeTx": {
       "type": "struct",
       "type_mapping": [
-        ["nonce", "u64"],
-        ["recipient", "IssueRecipient"],
-        ["value", "u128"],
+        ["nonce", "u32"],
+        ["recipient", "AccountId"],
+        ["value", "Balance"],
         ["tx_hash", "H256"]
       ]
     },
@@ -524,6 +526,15 @@
         ["expiry", "Option<Moment>"]
       ]
     },
+    "VotingResult": {
+      "type": "enum",
+      "type_mapping": [
+        ["ayes_count", "u32"],
+        ["ayes_stake", "Balance"],
+        ["nays_count", "u32"],
+        ["nays_stake", "Balance"]
+      ]
+    },
     "ProtocolOp": {
       "type": "enum",
       "value_list": [
@@ -538,7 +549,7 @@
         "IdentityAddClaim",
         "IdentitySetMasterKey",
         "IdentityAddSigningItem",
-        "MipsPropose",
+        "PipsPropose",
         "VotingAddBallot"
       ]
     }
@@ -585,5 +596,25 @@
       ["ProposalNotFound", "Vec<u8>"]
     ]
   },
-  "Weight": "u32"
+  "Weight": "u32",
+  "BridgeTxDetail": {
+    "type": "struct",
+    "type_mapping": [
+      ["amount", "Balance"],
+      ["status", "BridgeTxStatus"],
+      ["execution_block", "BlockNumber"],
+      ["tx_hash", "H256"]
+    ]
+  },
+  "BridgeTxStatus": {
+    "type": "enum",
+    "type_mapping": [
+      ["Absent", "Null"],
+      ["Pending", "u8"],
+      ["Frozen", "Null"],
+      ["Timelocked", "Null"],
+      ["Handled", "Null"]
+    ]
+  },
+  "CappedFee": "u64"
 }
