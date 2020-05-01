@@ -352,12 +352,19 @@
       "type": "enum",
       "value_list": ["FastTracked", "Emergency", "Community"]
     },
-    "PIP": {
+    "Pip": {
       "type": "struct",
       "type_mapping": [
         ["id", "PipId"],
         ["proposal", "Call"],
         ["state", "ProposalState"]
+      ]
+    },
+    "ProposalData" : {
+      "type": "enum",
+      "type_mapping": [
+          ["Hash", "Hash"],
+          ["Proposal", "Vec<u8>"]
       ]
     },
     "Referendum": {
