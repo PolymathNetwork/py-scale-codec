@@ -24,10 +24,15 @@
     "AssetType": {
       "type": "enum",
       "type_mapping": [
-        ["Equity", "Null"],
-        ["Debt", "Null"],
+        ["EquityCommon", "Null"],
+        ["EquityPreferred", "Null"],
         ["Commodity", "Null"],
+        ["FixedIncome", "Null"],
+        ["REIT", "Null"],
+        ["Fund", "Null"],
+        ["RevenueShareAgreement", "Null"],
         ["StructuredProduct", "Null"],
+        ["Derivative", "Null"],
         ["Custom", "Vec<u8>"]
       ]
     },
@@ -39,13 +44,13 @@
         ["Isin", "Null"]
       ]
     },
-    "TokenName": "String",
+    "AssetName": "String",
     "AssetIdentifier": "String",
     "FundingRoundName": "String",
     "SecurityToken": {
       "type": "struct",
       "type_mapping": [
-        ["name", "TokenName"],
+        ["name", "AssetName"],
         ["total_supply", "Balance"],
         ["owner_did", "IdentityId"],
         ["divisible", "bool"],
@@ -78,7 +83,7 @@
       "type_mapping": [
         ["DocumentOwned", "Document"],
         ["TickerOwned", "Ticker"],
-        ["TokenOwned", "Ticker"]
+        ["AssetOwned", "Ticker"]
       ]
     },
     "SignatoryType": {
@@ -227,7 +232,7 @@
       "type_mapping": [
         ["investor_did", "IdentityId"],
         ["amount_paid", "Balance"],
-        ["tokens_purchased", "Balance"],
+        ["assets_purchased", "Balance"],
         ["last_purchase_date", "Moment"]
       ]
     },
@@ -405,7 +410,7 @@
         ["RotateMasterKey", "IdentityId"],
         ["TransferTicker", "Ticker"],
         ["AddMultiSigSigner", "Null"],
-        ["TransferTokenOwnership", "Ticker"],
+        ["TransferAssetOwnership", "Ticker"],
         ["JoinIdentity", "IdentityId"],
         ["Custom", "Vec<u8>"],
         ["NoData", "Null"]
@@ -548,7 +553,7 @@
         "AssetRegisterTicker",
         "AssetIssue",
         "AssetAddDocument",
-        "AssetCreateToken",
+        "AssetCreateAsset",
         "DividendNew",
         "ComplianceManagerAddActiveRule",
         "IdentityRegisterDid",
