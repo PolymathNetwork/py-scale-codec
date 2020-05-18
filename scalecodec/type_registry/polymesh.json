@@ -564,84 +564,94 @@
         "PipsPropose",
         "VotingAddBallot"
       ]
-    }
-  },
-  "CddStatus": {
-    "type": "enum",
-    "type_mapping": [
-      ["Ok", "IdentityId"],
-      ["Err", "Vec<u8>"]
-    ]
-  },
-  "AssetDidResult": {
-    "type": "enum",
-    "type_mapping": [
-      ["Ok", "IdentityId"],
-      ["Err", "Vec<u8>"]
-    ]
-  },
-  "DidRecordsSuccess": {
-    "type": "struct",
-    "type_mapping": [
-      ["master_key", "AccountKey"],
-      ["signing_items", "Vec<SigningItem>"]
-    ]
-  },
-  "DidRecords": {
-    "type": "enum",
-    "type_mapping": [
-      ["Success", "DidRecordsSuccess"],
-      ["IdNotFound", "Vec<u8>"]
-    ]
-  },
-  "CappedVoteCountSuccess": {
-    "type": "struct",
-    "type_mapping": [
-      ["ayes", "u64"],
-      ["nays", "u64"]
-    ]
-  },
-  "CappedVoteCount": {
-    "type": "enum",
-    "type_mapping": [
-      ["Success", "CappedVoteCountSuccess"],
-      ["ProposalNotFound", "Vec<u8>"]
-    ]
-  },
-  "Weight": "u32",
-  "BlockNumber": "u32",
-  "BridgeTxStatus": {
-    "type": "enum",
-    "type_mapping": [
-      ["Absent", "Null"],
-      ["Pending", "u8"],
-      ["Frozen", "Null"],
-      ["Timelocked", "Null"],
-      ["Handled", "Null"]
-    ]
-  },
-  "HandledTxStatus": {
-    "type": "enum",
-    "type_mapping": [
-        ["Success", "Null"],
-        ["Error", "Text"]
-    ]
-  },
-  "BridgeTxDetail": {
-    "type": "struct",
-    "type_mapping": [
-      ["amount", "Balance"],
-      ["status", "BridgeTxStatus"],
-      ["execution_block", "BlockNumber"],
-      ["tx_hash", "H256"]
-    ]
-  },
-  "CappedFee": "u64",
-  "CanTransferResult": {
-    "type": "struct",
-    "type_mapping": [
-      ["Ok", "u8"],
-      ["Err", "Vec<u8>"]
-    ]
+    },
+    "CddStatus": {
+      "type": "enum",
+      "type_mapping": [
+        ["Ok", "IdentityId"],
+        ["Err", "Vec<u8>"]
+      ]
+    },
+    "AssetDidResult": {
+      "type": "enum",
+      "type_mapping": [
+        ["Ok", "IdentityId"],
+        ["Err", "Vec<u8>"]
+      ]
+    },
+    "DidRecordsSuccess": {
+      "type": "struct",
+      "type_mapping": [
+        ["master_key", "AccountKey"],
+        ["signing_items", "Vec<SigningItem>"]
+      ]
+    },
+    "DidRecords": {
+      "type": "enum",
+      "type_mapping": [
+        ["Success", "DidRecordsSuccess"],
+        ["IdNotFound", "Vec<u8>"]
+      ]
+    },
+    "CappedVoteCountSuccess": {
+      "type": "struct",
+      "type_mapping": [
+        ["ayes", "u64"],
+        ["nays", "u64"]
+      ]
+    },
+    "CappedVoteCount": {
+      "type": "enum",
+      "type_mapping": [
+        ["Success", "CappedVoteCountSuccess"],
+        ["ProposalNotFound", "Vec<u8>"]
+      ]
+    },
+    "Weight": "u32",
+    "BlockNumber": "u32",
+    "BridgeTxStatus": {
+      "type": "enum",
+      "type_mapping": [
+        ["Absent", "Null"],
+        ["Pending", "u8"],
+        ["Frozen", "Null"],
+        ["Timelocked", "Null"],
+        ["Handled", "Null"]
+      ]
+    },
+    "HandledTxStatus": {
+      "type": "enum",
+      "type_mapping": [
+          ["Success", "Null"],
+          ["Error", "Text"]
+      ]
+    },
+    "BridgeTxDetail": {
+      "type": "struct",
+      "type_mapping": [
+        ["amount", "Balance"],
+        ["status", "BridgeTxStatus"],
+        ["execution_block", "BlockNumber"],
+        ["tx_hash", "H256"]
+      ]
+    },
+    "CappedFee": "u64",
+    "CanTransferResult": {
+      "type": "struct",
+      "type_mapping": [
+        ["Ok", "u8"],
+        ["Err", "Vec<u8>"]
+      ]
+    },
+    "SessionKeysPolkadot": {
+      "type": "struct",
+      "type_mapping": [
+          ["grandpa", "AccountKey"],
+          ["babe", "AccountKey"],
+          ["im_online", "AccountKey"],
+          ["authority_discovery", "AccountKey"]
+      ]
+    },
+    "Keys": "SessionKeysPolkadot"
   }
 }
