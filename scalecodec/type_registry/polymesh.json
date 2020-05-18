@@ -643,7 +643,7 @@
         ["grandpa", "AccountKey"],
         ["babe", "AccountKey"],
         ["im_online", "AccountKey"],
-        ["authority_discovery", "AccountId"]
+        ["authority_discovery", "AccountKey"]
     ]
   },
   "Keys": "SessionKeysPolkadot"
