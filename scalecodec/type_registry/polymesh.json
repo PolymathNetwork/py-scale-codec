@@ -636,15 +636,5 @@
       ["Ok", "u8"],
       ["Err", "Vec<u8>"]
     ]
-  },
-  "SessionKeysPolkadot": {
-    "type": "struct",
-    "type_mapping": [
-        ["grandpa", "AccountKey"],
-        ["babe", "AccountKey"],
-        ["im_online", "AccountKey"],
-        ["authority_discovery", "AccountKey"]
-    ]
-  },
-  "Keys": "SessionKeysPolkadot"
+  }
 }

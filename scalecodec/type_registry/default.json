@@ -626,6 +626,16 @@
         ["payout", "Balance"]
       ]
     },
+    "SessionKeysPolkadot": {
+      "type": "struct",
+      "type_mapping": [
+          ["grandpa", "AccountKey"],
+          ["babe", "AccountKey"],
+          ["im_online", "AccountKey"],
+          ["authority_discovery", "AccountKey"]
+      ]
+    },
+    "Keys": "SessionKeysPolkadot",
     "Header": {
       "type": "struct",
       "type_mapping": [
