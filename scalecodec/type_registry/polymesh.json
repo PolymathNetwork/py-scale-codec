@@ -552,7 +552,7 @@
       "value_list": [
         "AssetRegisterTicker",
         "AssetIssue",
-        "AssetAddDocument",
+        "AssetAddDocuments",
         "AssetCreateAsset",
         "DividendNew",
         "ComplianceManagerAddActiveRule",
@@ -560,7 +560,7 @@
         "IdentityCddRegisterDid",
         "IdentityAddClaim",
         "IdentitySetMasterKey",
-        "IdentityAddSigningItem",
+        "IdentityAddSigningItemsWithAuthorization",
         "PipsPropose",
         "VotingAddBallot"
       ]
@@ -618,6 +618,13 @@
       ["Frozen", "Null"],
       ["Timelocked", "Null"],
       ["Handled", "Null"]
+    ]
+  },
+  "HandledTxStatus": {
+    "type": "enum",
+    "type_mapping": [
+        ["Success", "Null"],
+        ["Error", "Text"]
     ]
   },
   "BridgeTxDetail": {
