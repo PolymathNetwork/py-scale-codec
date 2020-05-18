@@ -626,7 +626,6 @@
         ["payout", "Balance"]
       ]
     },
-    "Keys": "SessionKeysSubstrate",
     "Header": {
       "type": "struct",
       "type_mapping": [
