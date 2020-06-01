@@ -1,25 +1,29 @@
-# Python SCALE Codec
-[![Travis CI Build Status](https://api.travis-ci.org/polkascan/py-scale-codec.svg?branch=master)](https://travis-ci.org/polkascan/py-scale-codec)
-[![Latest Version](https://img.shields.io/pypi/v/scalecodec.svg)](https://pypi.org/project/scalecodec/) 
-[![Supported Python versions](https://img.shields.io/pypi/pyversions/scalecodec.svg)](https://pypi.org/project/scalecodec/)
-[![License](https://img.shields.io/pypi/l/scalecodec.svg)](https://github.com/polkascan/py-scale-codec/blob/master/LICENSE)
+#### This project is forked from https://github.com/polkascan/py-scale-codec
 
-Python SCALE Codec Library
+# Python Polymath SCALE Codec
+
+[![Latest Version](https://img.shields.io/pypi/v/polymath-scalecodec.svg)](https://pypi.org/project/polymath-scalecodec)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/polymath-scalecodec.svg)](https://pypi.org/project/polymath-scalecodec/)
+
+Python Polymath SCALE Codec Library
 
 ## Description
+
 Most of the data that the Substrate RPCs output is encoded with the SCALE Codec. This codec is used by the Substrate nodes' internal runtime. In order to get to meaningful data this data will need to be decoded. The Python SCALE Codec Library will specialize in this task.
 
 ## Documentation
+
 https://polkascan.github.io/py-scale-codec/
 
 ## Installation
+
 ```bash
-pip install scalecodec
+pip install polymath-scalecodec
 ```
 
 ## Examples
 
-Decode a SCALE-encoded Compact\<Balance\> 
+Decode a SCALE-encoded Compact\<Balance\>
 
 ```python
 RuntimeConfiguration().update_type_registry(load_type_registry_preset("default"))
@@ -44,7 +48,7 @@ custom_types = {
              ["weight", "AuthorityWeight"]
           ]
         }
-    }   
+    }
 }
 
 RuntimeConfiguration().update_type_registry(custom_types)
@@ -58,4 +62,5 @@ RuntimeConfiguration().update_type_registry(load_type_registry_file("/path/to/ty
 ```
 
 ## License
-https://github.com/polkascan/py-scale-codec/blob/master/LICENSE
+
+https://github.com/PolymathNetwork/py-scale-codec/blob/master/LICENSE
