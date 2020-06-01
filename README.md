@@ -1,11 +1,9 @@
-# Python SCALE Codec
+# Python Polymath SCALE Codec
 
-[![Travis CI Build Status](https://api.travis-ci.org/polkascan/py-scale-codec.svg?branch=master)](https://travis-ci.org/polkascan/py-scale-codec)
-[![Latest Version](https://img.shields.io/pypi/v/scalecodec.svg)](https://pypi.org/project/scalecodec/)
-[![Supported Python versions](https://img.shields.io/pypi/pyversions/scalecodec.svg)](https://pypi.org/project/scalecodec/)
-[![License](https://img.shields.io/pypi/l/scalecodec.svg)](https://github.com/polkascan/py-scale-codec/blob/master/LICENSE)
+[![Latest Version](https://img.shields.io/pypi/v/polymath-scalecodec.svg)](https://pypi.org/project/polymath-scalecodec)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/polymath-scalecodec.svg)](https://pypi.org/project/polymath-scalecodec/)
 
-Python SCALE Codec Library
+Python Polymath SCALE Codec Library
 
 ## Description
 
@@ -63,4 +61,4 @@ RuntimeConfiguration().update_type_registry(load_type_registry_file("/path/to/ty
 
 ## License
 
-https://github.com/polkascan/py-scale-codec/blob/master/LICENSE
+https://github.com/PolymathNetwork/py-scale-codec/blob/master/LICENSE
