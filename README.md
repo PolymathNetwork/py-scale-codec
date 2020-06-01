@@ -1,3 +1,5 @@
+#### This project is forked from https://github.com/polkascan/py-scale-codec
+
 # Python Polymath SCALE Codec
 
 [![Latest Version](https://img.shields.io/pypi/v/polymath-scalecodec.svg)](https://pypi.org/project/polymath-scalecodec)
