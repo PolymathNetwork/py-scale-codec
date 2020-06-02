@@ -15,18 +15,18 @@ from os import path, environ
 from io import open
 
 
-# if environ.get('TRAVIS_TAG'):
-#     version = environ['TRAVIS_TAG'].replace('v', '')
-# elif environ.get('CI_COMMIT_TAG'):
-#     version = environ['CI_COMMIT_TAG'].replace('v', '')
-# elif environ.get('GITHUB_REF'):
+if environ.get('TRAVIS_TAG'):
+    version = environ['TRAVIS_TAG'].replace('v', '')
+elif environ.get('CI_COMMIT_TAG'):
+    version = environ['CI_COMMIT_TAG'].replace('v', '')
+elif environ.get('GITHUB_REF'):
 
-#     if not environ['GITHUB_REF'].startswith('refs/tags/v'):
-#         raise ValueError('Incorrect tag format {}'.format(environ['GITHUB_REF']))
+    if not environ['GITHUB_REF'].startswith('refs/tags/v'):
+        raise ValueError('Incorrect tag format {}'.format(environ['GITHUB_REF']))
 
-#     version = environ['GITHUB_REF'].replace('refs/tags/v', '')
-# else:
-#     raise ValueError('Missing commit tag, can\'t set version')
+    version = environ['GITHUB_REF'].replace('refs/tags/v', '')
+else:
+    raise ValueError('Missing commit tag, can\'t set version')
 
 here = path.abspath(path.dirname(__file__))
 
@@ -57,7 +57,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.3.16',  # Required
+    version=version,  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
