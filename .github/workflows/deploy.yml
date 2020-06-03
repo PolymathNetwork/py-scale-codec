@@ -1,4 +1,4 @@
-name: Test and deploy to PYPI
+name: Test and Deploy
 
 on:
   release:
