@@ -623,7 +623,7 @@
       "type": "enum",
       "type_mapping": [
           ["Success", "Null"],
-          ["Error", "Text"]
+          ["Error", "String"]
       ]
     },
     "BridgeTxDetail": {
