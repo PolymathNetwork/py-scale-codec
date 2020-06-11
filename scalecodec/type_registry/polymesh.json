@@ -199,6 +199,15 @@
         ["rule_id", "u32"]
       ]
     },
+    "AssetTransferRuleResult": {
+      "type": "struct",
+      "type_mapping": [
+        ["sender_rules", "Vec<Rule>"],
+        ["receiver_rules", "Vec<Rule>"],
+        ["rule_id", "u32"],
+        ["transfer_rule_result", "bool"]
+      ]
+    },
     "RuleType": {
       "type": "enum",
       "type_mapping": [
@@ -213,6 +222,13 @@
       "type_mapping": [
         ["rule_type", "RuleType"],
         ["issuers", "Vec<IdentityId>"]
+      ]
+    },
+    "RuleResult": {
+      "type": "struct",
+      "type_mapping": [
+        ["rule", "Rule"],
+        ["result", "bool"]
       ]
     },
     "STO": {
@@ -501,6 +517,14 @@
         ["rules", "Vec<AssetTransferRule>"]
       ]
     },
+    "AssetTransferRulesResult": {
+      "type": "struct",
+      "type_mapping": [
+        ["is_paused", "bool"],
+        ["rules", "Vec<AssetTransferRule>"],
+        ["final_result", "bool"]
+      ]
+    },
     "Claim1stKey": {
       "type": "struct",
       "type_mapping": [
@@ -600,6 +624,13 @@
         ["nays", "u64"]
       ]
     },
+    "VoteCountProposalFound": {
+      "type": "struct",
+      "type_mapping": [
+        ["ayes", "u64"],
+        ["nays", "u64"]
+      ]
+    },
     "CappedVoteCount": {
       "type": "enum",
       "type_mapping": [
@@ -607,6 +638,30 @@
         ["ProposalNotFound", "Vec<u8>"]
       ]
     },
+    "VoteCount": {
+      "type": "enum",
+      "type_mapping": [
+        ["ProposalFound", "VoteCountProposalFound"],
+        ["ProposalNotFound", "Vec<u8>"]
+      ]
+    },
+    "Vote": {
+      "type": "enum",
+      "type_mapping": [
+        ["None", "Null"],
+        ["Yes", "Balance"],
+        ["No", "Balance"]
+      ]
+    },
+    "VoteByPip": {
+      "type": "struct",
+      "type_mapping": [
+        ["pip", "PipId"],
+        ["vote", "Vote"]
+      ]
+    },
+    "HistoricalVotingByAddress": "Vec<VoteByPip>",
+    "HistoricalVotingById": "Vec<(AccountKey, HistoricalVotingByAddress)>",
     "Weight": "u32",
     "BlockNumber": "u32",
     "BridgeTxStatus": {
@@ -641,6 +696,23 @@
       "type_mapping": [
         ["Ok", "u8"],
         ["Err", "Vec<u8>"]
+      ]
+    },
+    "LinkType": {
+      "type": "enum",
+      "type_mapping": [
+        ["DocumentOwnership", "Null"],
+        ["TickerOwnership", "Null"],
+        ["AssetOwnership", "Null"],
+        ["NoData", "Null"]
+      ]
+    },
+    "DidStatus": {
+      "type": "enum",
+      "type_mapping": [
+        ["Unknown", "Null"],
+        ["Exists", "Null"],
+        ["CddVerified", "Null"]
       ]
     },
     "SessionKeysPolkadot": {
