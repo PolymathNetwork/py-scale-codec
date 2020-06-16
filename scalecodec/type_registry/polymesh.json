@@ -145,6 +145,36 @@
     },
     "JurisdictionName": "String",
     "Scope": "IdentityId",
+    "Claim": {
+      "type": "enum",
+      "type_mapping": [
+        ["Accredited", "Scope"],
+        ["Affiliate", "Scope"],
+        ["BuyLockup", "Scope"],
+        ["SellLockup", "Scope"],
+        ["CustomerDueDiligence", "Null"],
+        ["KnowYourCustomer", "Scope"],
+        ["Jurisdiction", "(JurisdictionName, Scope)"],
+        ["Exempted", "Scope"],
+        ["Blocked", "Scope"],
+        ["NoData", "Null"]
+      ]
+    },
+    "ClaimType": {
+      "type": "enum",
+      "type_mapping": [
+        ["Accredited", "Null"],
+        ["Affiliate", "Null"],
+        ["BuyLockup", "Null"],
+        ["SellLockup", "Null"],
+        ["CustomerDueDiligence", "Null"],
+        ["KnowYourCustomer", "Null"],
+        ["Jurisdiction", "Null"],
+        ["Exempted", "Null"],
+        ["Blocked", "Null"],
+        ["NoType", "Null"]
+      ]
+    },
     "IdentityClaim": {
       "type": "struct",
       "type_mapping": [
@@ -728,41 +758,6 @@
             ["Jurisdiction", "Null"],
             ["Whitelisted", "Null"],
             ["Blacklisted", "Null"],
-            ["NoType", "Null"]
-          ]
-        }
-      }
-    },
-    {
-      "runtime_range": [1006, null],
-      "types": {
-        "Claim": {
-          "type": "enum",
-          "type_mapping": [
-            ["Accredited", "Scope"],
-            ["Affiliate", "Scope"],
-            ["BuyLockup", "Scope"],
-            ["SellLockup", "Scope"],
-            ["CustomerDueDiligence", "Null"],
-            ["KnowYourCustomer", "Scope"],
-            ["Jurisdiction", "(JurisdictionName, Scope)"],
-            ["Exempted", "Scope"],
-            ["Blocked", "Scope"],
-            ["NoData", "Null"]
-          ]
-        },
-        "ClaimType": {
-          "type": "enum",
-          "type_mapping": [
-            ["Accredited", "Null"],
-            ["Affiliate", "Null"],
-            ["BuyLockup", "Null"],
-            ["SellLockup", "Null"],
-            ["CustomerDueDiligence", "Null"],
-            ["KnowYourCustomer", "Null"],
-            ["Jurisdiction", "Null"],
-            ["Exempted", "Null"],
-            ["Blocked", "Null"],
             ["NoType", "Null"]
           ]
         }
