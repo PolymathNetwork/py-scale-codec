@@ -386,7 +386,7 @@
       "type": "enum",
       "type_mapping": [
           ["Hash", "Hash"],
-          ["Proposal", "Vec<u8>"]
+          ["Proposal", "HexBytes"]
       ]
     },
     "Referendum": {
