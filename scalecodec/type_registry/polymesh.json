@@ -812,10 +812,13 @@
       ]
     },
     "ReceiptDetails": {
-        "receipt_uid": "u64",
-        "leg_id": "u64",
-        "signer": "AccountId",
-        "signature": "OffChainSignature"
+      "type": "struct",
+      "type_mapping": [
+        ["receipt_uid", "u64"],
+        ["leg_id", "u64"],
+        ["signer", "AccountId"],
+        ["signature", "OffChainSignature"]
+      ]
     },
     "UniqueCall": {
       "type": "struct",
