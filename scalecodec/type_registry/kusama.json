@@ -1,9 +1,10 @@
 {
-  "runtime_id": 1054,
+  "runtime_id": 2013,
   "types": {
     "Address": "AccountIdAddress",
     "BlockNumber": "U32",
     "LeasePeriod": "BlockNumber",
+    "Weight": "u64",
     "SessionKeysPolkadot": {
       "type": "struct",
       "type_mapping": [
@@ -14,7 +15,25 @@
          ["parachains", "AccountId"]
       ]
     },
-    "Keys": "SessionKeysPolkadot"
+    "Keys": "SessionKeysPolkadot",
+    "DispatchInfo": {
+      "type": "struct",
+      "type_mapping": [
+         ["weight", "Weight"],
+         ["class", "DispatchClass"],
+         ["paysFee", "Pays"]
+      ]
+    },
+    "ProxyType": {
+      "type": "enum",
+      "value_list": [
+        "Any",
+        "NonTransfer",
+        "Governance",
+        "Staking",
+        "IdentityJudgement"
+      ]
+    }
   },
   "versioning": [
     {
@@ -191,6 +210,83 @@
       "runtime_range": [1057, null],
       "types": {
         "Weight": "u64"
+      }
+    },
+    {
+      "runtime_range": [1019, 1061],
+      "types": {
+        "Heartbeat": {
+          "type": "struct",
+          "type_mapping": [
+             ["blockNumber", "BlockNumber"],
+             ["networkState", "OpaqueNetworkState"],
+             ["sessionIndex", "SessionIndex"],
+             ["authorityIndex", "AuthIndex"]
+          ]
+        },
+        "DispatchInfo": {
+          "type": "struct",
+          "type_mapping": [
+             ["weight", "Weight"],
+             ["class", "DispatchClass"],
+             ["paysFee", "bool"]
+          ]
+        }
+      }
+    },
+    {
+      "runtime_range": [1062, null],
+      "types": {
+        "Heartbeat": {
+          "type": "struct",
+          "type_mapping": [
+             ["blockNumber", "BlockNumber"],
+             ["networkState", "OpaqueNetworkState"],
+             ["sessionIndex", "SessionIndex"],
+             ["authorityIndex", "AuthIndex"],
+             ["validatorsLen", "u32"]
+          ]
+        },
+        "DispatchInfo": {
+          "type": "struct",
+          "type_mapping": [
+             ["weight", "Weight"],
+             ["class", "DispatchClass"],
+             ["paysFee", "Pays"]
+          ]
+        }
+      }
+    },
+    {
+      "runtime_range": [1019, 2012],
+      "types": {
+        "OpenTip": {
+          "type": "struct",
+          "type_mapping": [
+             ["reason", "Hash"],
+             ["who", "AccountId"],
+             ["finder", "Option<OpenTipFinder>"],
+             ["closes", "Option<BlockNumber>"],
+             ["tips", "Vec<OpenTipTip>"]
+          ]
+        }
+      }
+    },
+    {
+      "runtime_range": [2013, null],
+      "types": {
+        "OpenTip": {
+          "type": "struct",
+          "type_mapping": [
+             ["reason", "Hash"],
+             ["who", "AccountId"],
+             ["finder", "AccountId"],
+             ["deposit", "Balance"],
+             ["closes", "Option<BlockNumber>"],
+             ["tips", "Vec<OpenTipTip>"],
+             ["findersFee", "bool"]
+          ]
+        }
       }
     }
   ]
