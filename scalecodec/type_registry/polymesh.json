@@ -752,8 +752,8 @@
     "LegStatus": {
       "type": "enum",
       "type_mapping": [
-        ["PendingTokenLock", ""],
-        ["ExecutionPending", ""],
+        ["PendingTokenLock", "Null"],
+        ["ExecutionPending", "Null"],
         ["ExecutionToBeSkipped", "(AccountId, u64)"]
       ]
     },
@@ -769,7 +769,7 @@
     "SettlementType": {
       "type": "enum",
       "type_mapping": [
-        ["SettleOnAuthorization", ""],
+        ["SettleOnAuthorization", "Null"],
         ["SettleOnBlock", "BlockNumber"]
       ]
     },
