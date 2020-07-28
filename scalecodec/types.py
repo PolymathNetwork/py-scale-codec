@@ -428,7 +428,6 @@ class Struct(ScaleType):
     def process(self):
 
         result = {}
-        print('Struct', self.__class__.__name__)
         for key, data_type in self.type_mapping:
             if data_type is None:
                 data_type = 'Null'
