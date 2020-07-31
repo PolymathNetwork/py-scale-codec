@@ -1,7 +1,7 @@
 {
   "types": {
     "IdentityId": "H256",
-    "Ticker": "[u8; 12]",
+    "Ticker": "Ticker",
     "(u32, u32)": {
       "type": "struct",
       "type_mapping": [

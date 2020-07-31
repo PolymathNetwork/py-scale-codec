@@ -1269,3 +1269,19 @@ class FixedLengthArray(ScaleType):
                 data += element_obj.encode(element_value)
 
             return data
+
+class Ticker(ScaleType):
+
+    type_string = 'Ticker'
+
+    def process(self):
+        value = self.get_next_bytes(12)
+        try:
+            return value.decode()
+        except UnicodeDecodeError:
+            return value.hex()
+
+    def process_encode(self, value):
+        if value[0:2] != '0x' and len(value) == 26:
+            raise ValueError('Value should start with "0x" and should be 12 bytes long')
+        return ScaleBytes(value)
