@@ -47,19 +47,44 @@ class RuntimeConfiguration(metaclass=Singleton):
 
         decoder_class = self.type_registry.get('types', {}).get(type_string.lower(), None)
 
-        if not decoder_class and type_string[-1:] == '>':
+        if not decoder_class:
 
-            # Extract sub types
-            type_parts = re.match(r'^([^<]*)<(.+)>$', type_string)
+            # Type string containg subtype
+            if type_string[-1:] == '>':
 
-            if type_parts:
-                type_parts = type_parts.groups()
+                # Extract sub types
+                type_parts = re.match(r'^([^<]*)<(.+)>$', type_string)
 
-            if type_parts:
-                # Create dynamic class for Part1<Part2> based on Part1 and set class variable Part2 as sub_type
-                base_class = self.type_registry.get('types', {}).get(type_parts[0].lower(), None)
-                if base_class:
-                    decoder_class = type(type_string, (base_class,), {'sub_type': type_parts[1]})
+                if type_parts:
+                    type_parts = type_parts.groups()
+
+                if type_parts:
+                    # Create dynamic class for Part1<Part2> based on Part1 and set class variable Part2 as sub_type
+                    base_class = self.type_registry.get('types', {}).get(type_parts[0].lower(), None)
+                    if base_class:
+                        decoder_class = type(type_string, (base_class,), {'sub_type': type_parts[1]})
+
+            # Custom tuples
+            elif type_string != '()' and type_string[0] == '(' and type_string[-1] == ')':
+
+                decoder_class = type(type_string, (RuntimeConfiguration().get_decoder_class('struct'),), {
+                    'type_string': type_string
+                })
+
+                decoder_class.build_type_mapping()
+
+            elif type_string[0] == '[' and type_string[-1] == ']':
+                type_parts = re.match(r'^\[([A-Za-z0-9]+); ([0-9]+)\]$', type_string)
+
+                if type_parts:
+                    type_parts = type_parts.groups()
+
+                if type_parts:
+                    # Create dynamic class for e.g. [u8; 4] resulting in array of u8 with 4 elements
+                    decoder_class = type(type_string, (RuntimeConfiguration().get_decoder_class('FixedLengthArray'),), {
+                        'sub_type': type_parts[0],
+                        'element_count': int(type_parts[1])
+                    })
 
         return decoder_class
 
@@ -138,7 +163,9 @@ class ScaleBytes:
 
         if type(data) is bytearray:
             self.data = data
-        elif data[0:2] == '0x':
+        elif type(data) is bytes:
+            self.data = bytearray(data)
+        elif type(data) is str and data[0:2] == '0x':
             self.data = bytearray.fromhex(data[2:])
         else:
             raise ValueError("Provided data is not in supported format: provided '{}'".format(type(data)))
@@ -219,11 +246,11 @@ class ScaleDecoder(ABC):
             if sub_types:
                 sub_types = sub_types.groups()
                 for sub_type in sub_types:
-                    tuple_contents = tuple_contents.replace(sub_type, sub_type.replace(',', ';'))
+                    tuple_contents = tuple_contents.replace(sub_type, sub_type.replace(',', '|'))
 
             n = 1
             for struct_element in tuple_contents.split(','):
-                type_mapping += (('col{}'.format(n), struct_element.strip().replace(';', ',')),)
+                type_mapping += (('col{}'.format(n), struct_element.strip().replace('|', ',')),)
                 n += 1
 
             cls.type_mapping = type_mapping
@@ -249,7 +276,7 @@ class ScaleDecoder(ABC):
 
     @abstractmethod
     def process(self):
-        pass
+        raise NotImplementedError
 
     def decode(self, check_remaining=True):
         self.value = self.process()
@@ -267,6 +294,7 @@ class ScaleDecoder(ABC):
         return str(self.value) or ''
 
     def encode(self, value):
+        self.value = value
         self.data = self.process_encode(value)
         return self.data
 
@@ -275,50 +303,20 @@ class ScaleDecoder(ABC):
 
     @classmethod
     def get_decoder_class(cls, type_string, data=None, **kwargs):
-
-        type_parts = None
+        """
+        :param type_string:
+        :param data:
+        :param kwargs:
+        :return: ScaleType
+        """
 
         type_string = cls.convert_type(type_string)
 
-        if type_string[-1:] == '>':
-            # Check for specific implementation for composite type
-            decoder_class = RuntimeConfiguration().get_decoder_class(
-                type_string.lower(),
-                spec_version_id=kwargs.get('spec_version_id', 'default')
-            )
-
-            if decoder_class:
-                return decoder_class(data, **kwargs)
-
-            # Extract sub types
-            type_parts = re.match(r'^([^<]*)<(.+)>$', type_string)
-
-            if type_parts:
-                type_parts = type_parts.groups()
-
-        if type_parts:
-            decoder_class = RuntimeConfiguration().get_decoder_class(
-                type_parts[0].lower(),
-                spec_version_id=kwargs.get('spec_version_id', 'default')
-            )
-            if decoder_class:
-                return decoder_class(data, sub_type=type_parts[1], **kwargs)
-        else:
-            decoder_class = RuntimeConfiguration().get_decoder_class(
-                type_string.lower(),
-                spec_version_id=kwargs.get('spec_version_id', 'default')
-            )
-            if decoder_class:
-                return decoder_class(data, **kwargs)
-
-        # Custom tuple
-        # TODO tuples should be converted to list not dict
-        if type_string != '()' and type_string[0] == '(' and type_string[-1] == ')':
-            decoder_class = RuntimeConfiguration().get_decoder_class('struct')
-            decoder_class.type_string = type_string
-
-            decoder_class.build_type_mapping()
-
+        decoder_class = RuntimeConfiguration().get_decoder_class(
+            type_string.lower(),
+            spec_version_id=kwargs.get('spec_version_id', 'default')
+        )
+        if decoder_class:
             return decoder_class(data, **kwargs)
 
         raise NotImplementedError('Decoder class for "{}" not found'.format(type_string))
@@ -327,10 +325,6 @@ class ScaleDecoder(ABC):
     def process_type(self, type_string, **kwargs):
         obj = self.get_decoder_class(type_string, self.data, **kwargs)
         obj.decode(check_remaining=False)
-        if self.debug:
-            print('=======================\nClass:\t{}\nType:\t{}\nValue:\t{}\nRaw:\t{}\n\nOffset:\t{} / {}\n'.format(
-                self.__class__.__name__, type_string, obj.value, obj.raw_value, self.data.offset, self.data.length
-            ))
         return obj
 
     def serialize(self):
@@ -358,8 +352,6 @@ class ScaleDecoder(ABC):
             return 'Compact<Balance>'
         if name == '<BlockNumber as HasCompact>::Type':
             return 'Compact<BlockNumber>'
-        if name == '<Balance as HasCompact>::Type':
-            return 'Compact<Balance>'
         if name == '<Moment as HasCompact>::Type':
             return 'Compact<Moment>'
         if name == '<InherentOfflineReport as InherentOfflineReport>::Inherent':
@@ -378,3 +370,5 @@ class ScaleType(ScaleDecoder, ABC):
         if not data:
             data = ScaleBytes(bytearray())
         super().__init__(data, sub_type)
+
+
