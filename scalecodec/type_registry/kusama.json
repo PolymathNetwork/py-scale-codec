@@ -1,5 +1,5 @@
 {
-  "runtime_id": 2013,
+  "runtime_id": 2023,
   "types": {
     "Address": "AccountIdAddress",
     "BlockNumber": "U32",
@@ -33,7 +33,8 @@
         "Staking",
         "IdentityJudgement"
       ]
-    }
+    },
+    "CompactAssignments": "CompactAssignmentsFrom258"
   },
   "versioning": [
     {
@@ -130,15 +131,7 @@
       "runtime_range": [1019, 1045],
       "types": {
         "Address": "RawAddress",
-        "StakingLedger<AccountId, BalanceOf>": {
-          "type": "struct",
-          "type_mapping": [
-             ["stash", "AccountId"],
-             ["total", "Compact<Balance>"],
-             ["active", "Compact<Balance>"],
-             ["unlocking", "Vec<UnlockChunk<Balance>>"]
-          ]
-        },
+        "StakingLedger": "StakingLedgerTo223",
         "BalanceLock": {
           "type": "struct",
           "type_mapping": [
@@ -151,17 +144,47 @@
       }
     },
     {
-      "runtime_range": [1050, null],
+      "runtime_range": [1050, 1056],
       "types": {
         "Address": "AccountIdAddress",
-        "StakingLedger<AccountId, BalanceOf>": {
+        "StakingLedger": "StakingLedgerTo240",
+        "BalanceLock": {
           "type": "struct",
           "type_mapping": [
-            ["stash", "AccountId"],
-            ["total", "Compact<Balance>"],
-            ["active", "Compact<Balance>"],
-            ["unlocking", "Vec<UnlockChunk<Balance>>"],
-            ["lastReward", "Option<EraIndex>"]
+             ["id", "LockIdentifier"],
+             ["amount", "Balance"],
+             ["reasons", "Reasons"]
+          ]
+        }
+      }
+    },
+    {
+      "runtime_range": [1057, null],
+      "types": {
+        "Address": "AccountIdAddress",
+        "StakingLedger": {
+          "type": "struct",
+          "type_mapping": [
+            [
+              "stash",
+              "AccountId"
+            ],
+            [
+              "total",
+              "Compact<Balance>"
+            ],
+            [
+              "active",
+              "Compact<Balance>"
+            ],
+            [
+              "unlocking",
+              "Vec<UnlockChunk>"
+            ],
+            [
+              "claimedRewards",
+              "Vec<EraIndex>"
+            ]
           ]
         },
         "BalanceLock": {
@@ -287,6 +310,18 @@
              ["findersFee", "bool"]
           ]
         }
+      }
+    },
+    {
+      "runtime_range": [1019, 2022],
+      "types": {
+        "CompactAssignments": "CompactAssignmentsTo257"
+      }
+    },
+    {
+      "runtime_range": [2023, null],
+      "types": {
+        "CompactAssignments": "CompactAssignmentsFrom258"
       }
     }
   ]
