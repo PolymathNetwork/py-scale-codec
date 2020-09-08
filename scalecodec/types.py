@@ -429,10 +429,7 @@ class Struct(ScaleType):
     def process(self):
 
         result = {}
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/master
         for key, data_type in self.type_mapping:
             if data_type is None:
                 data_type = 'Null'
