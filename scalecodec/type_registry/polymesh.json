@@ -48,7 +48,7 @@
       "type_mapping": [
         ["NotOwned", "Null"],
         ["TickerOwned", "Null"],
-        ["AssetOwned", "Null]"]
+        ["AssetOwned", "Null"]
       ]
     },
     "AssetName": "String",
