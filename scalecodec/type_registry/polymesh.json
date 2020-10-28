@@ -1179,6 +1179,7 @@
       "type": "enum",
       "value_list": ["Other", "Distribution", "Sto", "Exchange"]
     },
-    "CompactAssignments": "CompactAssignmentsFrom258"
+    "CompactAssignments": "CompactAssignmentsFrom258",
+    "RefCount": "u32"
   }
 }
