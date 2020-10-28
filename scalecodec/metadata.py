@@ -1,18 +1,18 @@
-#  Scale Codec
-#  Copyright (C) 2019  openAware B.V.
+# Python SCALE Codec Library
 #
-#  This program is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
+# Copyright 2018-2020 Stichting Polkascan (Polkascan Foundation).
 #
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-#  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 from scalecodec.base import ScaleDecoder, ScaleType
 
@@ -43,7 +43,8 @@ class MetadataDecoder(ScaleDecoder):
                 "MetadataV8Decoder",
                 "MetadataV9Decoder",
                 "MetadataV10Decoder",
-                "MetadataV11Decoder"
+                "MetadataV11Decoder",
+                "MetadataV12Decoder"
             ])
 
             self.metadata = self.process_type(self.version.value)
@@ -968,6 +969,118 @@ class MetadataV11Decoder(ScaleDecoder):
         result_data["metadata"]["MetadataV11"]["extrinsic"] = self.process_type("ExtrinsicMetadata").value
 
         return result_data
+
+
+class MetadataV12Decoder(ScaleDecoder):
+
+    def __init__(self, data, sub_type=None):
+        self.version = None
+        self.modules = []
+        self.call_index = {}
+        self.event_index = {}
+
+        super().__init__(data, sub_type)
+
+    def process(self):
+        result_data = {
+            "magicNumber": 1635018093,  # struct.unpack('<L', bytearray.fromhex("6174656d")),
+            "metadata": {
+                "MetadataV12": {
+                    "modules": [],
+                }
+            }
+        }
+
+        self.modules = self.process_type('Vec<MetadataV12Module>').elements
+
+        # Build call and event index
+
+        for module in self.modules:
+            if module.calls is not None:
+                for call_index, call in enumerate(module.calls):
+                    call.lookup = "{:02x}{:02x}".format(module.index, call_index)
+                    self.call_index[call.lookup] = (module, call)
+
+            if module.events is not None:
+                for event_index, event in enumerate(module.events):
+                    event.lookup = "{:02x}{:02x}".format(module.index, event_index)
+                    self.event_index[event.lookup] = (module, event)
+
+        result_data["metadata"]["MetadataV12"]["modules"] = [m.value for m in self.modules]
+        result_data["metadata"]["MetadataV12"]["extrinsic"] = self.process_type("ExtrinsicMetadata").value
+
+        return result_data
+
+
+class MetadataV12Module(ScaleType):
+
+    def __init__(self, data, sub_type=None, **kwargs):
+        self.name = None
+        self.prefix = None
+        self.call_index = None
+        self.has_storage = False
+        self.storage = None
+        self.has_calls = False
+        self.calls = None
+        self.has_events = False
+        self.events = None
+        self.constants = []
+        self.errors = []
+        self.index = None
+        super().__init__(data, sub_type, **kwargs)
+
+    def get_identifier(self):
+        return self.name.lower()
+
+    def process(self):
+
+        self.name = self.process_type('Bytes').value
+
+        result = {
+            "name": self.name,
+            "prefix": self.prefix,
+            "storage": self.storage,
+            "calls": self.calls,
+            "events": self.events,
+            "constants": self.constants,
+            "errors": self.errors,
+            "index": self.index
+        }
+
+        self.has_storage = self.process_type('bool').value
+
+        if self.has_storage:
+            # TODO convert to Option<Vec<MetadataModuleStorage>>
+            self.storage = self.process_type('MetadataV7ModuleStorage')
+            result["storage"] = self.storage.value
+            # TODO moved to storage, change data model
+            self.prefix = self.storage.prefix
+            result["prefix"] = self.prefix
+
+        self.has_calls = self.process_type('bool').value
+
+        if self.has_calls:
+            # TODO convert to Option<Vec<MetadataModuleCall>>
+            self.calls = self.process_type('Vec<MetadataModuleCall>').elements
+            result["calls"] = [s.value for s in self.calls]
+
+        self.has_events = self.process_type('bool').value
+
+        if self.has_events:
+            # TODO convert to Option<Vec<MetadataModuleEvent>>
+            self.events = self.process_type('Vec<MetadataModuleEvent>').elements
+            result["events"] = [s.value for s in self.events]
+
+        self.constants = self.process_type('Vec<MetadataV7ModuleConstants>').elements
+        result["constants"] = [s.value for s in self.constants]
+
+        self.errors = self.process_type('Vec<MetadataModuleError>').elements
+        result["errors"] = [s.value for s in self.errors]
+
+        self.index = self.process_type('u8').value
+        result["index"] = self.index
+
+        return result
 
 
 class MetadataV3Decoder(ScaleDecoder):

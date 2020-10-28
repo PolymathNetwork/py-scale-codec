@@ -1,27 +1,26 @@
 # Python SCALE Codec Library
 #
-# Copyright 2018-2020 openAware BV (NL).
-# This file is part of Polkascan.
+# Copyright 2018-2020 Stichting Polkascan (Polkascan Foundation).
 #
-# Polkascan is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# Polkascan is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# http://www.apache.org/licenses/LICENSE-2.0
 #
-# You should have received a copy of the GNU General Public License
-# along with Polkascan. If not, see <http://www.gnu.org/licenses/>.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import unittest
 
 from scalecodec.base import ScaleBytes, RuntimeConfiguration, ScaleDecoder
 from scalecodec.metadata import MetadataDecoder
 from scalecodec.type_registry import load_type_registry_preset
-from test.fixtures import metadata_v3_hex, metadata_v2_hex, metadata_v1_hex
+from test.fixtures import metadata_v3_hex, metadata_v2_hex, metadata_v1_hex, invalid_metadata_v1_hex, metadata_v12_hex, \
+    metadata_v11_hex, metadata_v10_hex, metadata_v9_hex
 
 
 class TestMetadata(unittest.TestCase):
@@ -47,8 +46,8 @@ class TestMetadata(unittest.TestCase):
         self.assertEqual(metadata_decoder.version.value, "MetadataV1Decoder")
 
     def test_decode_invalid_metadata_v1(self):
-        metadata_decoder = MetadataDecoder(ScaleBytes(metadata_v1_hex))
-        self.assertRaises(Exception, metadata_decoder.decode())
+        metadata_decoder = MetadataDecoder(ScaleBytes(invalid_metadata_v1_hex))
+        self.assertRaises(Exception, metadata_decoder.decode)
 
     def test_all_scale_type_supported_v1(self):
         metadata_decoder = MetadataDecoder(ScaleBytes(metadata_v1_hex))
@@ -59,7 +58,7 @@ class TestMetadata(unittest.TestCase):
             if module.calls:
                 for call in module.calls:
                     for arg in call.args:
-                        decoder_class = ScaleDecoder.get_decoder_class(arg.type, ScaleBytes('0x00'))
+                        decoder_class = ScaleDecoder.get_decoder_class(arg.type)
                         self.assertIsNotNone(decoder_class, msg='{} is not supported by metadata'.format(arg.type))
 
     def test_all_scale_type_supported_v2(self):
@@ -71,7 +70,7 @@ class TestMetadata(unittest.TestCase):
             if module.calls:
                 for call in module.calls:
                     for arg in call.args:
-                        decoder_class = ScaleDecoder.get_decoder_class(arg.type, ScaleBytes('0x00'))
+                        decoder_class = ScaleDecoder.get_decoder_class(arg.type)
                         self.assertIsNotNone(decoder_class, msg='{} is not supported by metadata'.format(arg.type))
 
     def test_all_scale_type_supported_v3(self):
@@ -83,7 +82,53 @@ class TestMetadata(unittest.TestCase):
             if module.calls:
                 for call in module.calls:
                     for arg in call.args:
-                        decoder_class = ScaleDecoder.get_decoder_class(arg.type, ScaleBytes('0x00'))
+                        decoder_class = ScaleDecoder.get_decoder_class(arg.type)
                         self.assertIsNotNone(decoder_class, msg='{} is not supported by metadata'.format(arg.type))
 
+    def test_metadata_v9(self):
+        metadata_decoder = MetadataDecoder(ScaleBytes(metadata_v9_hex))
+        metadata_decoder.decode()
+        self.assertEqual(metadata_decoder.version.value, "MetadataV9Decoder")
 
+        for module in metadata_decoder.metadata.modules:
+            if module.calls:
+                for call in module.calls:
+                    for arg in call.args:
+                        decoder_class = ScaleDecoder.get_decoder_class(arg.type)
+                        self.assertIsNotNone(decoder_class, msg='{} is not supported by metadata'.format(arg.type))
+
+    def test_metadata_v10(self):
+        metadata_decoder = MetadataDecoder(ScaleBytes(metadata_v10_hex))
+        metadata_decoder.decode()
+        self.assertEqual(metadata_decoder.version.value, "MetadataV10Decoder")
+
+        for module in metadata_decoder.metadata.modules:
+            if module.calls:
+                for call in module.calls:
+                    for arg in call.args:
+                        decoder_class = ScaleDecoder.get_decoder_class(arg.type)
+                        self.assertIsNotNone(decoder_class, msg='{} is not supported by metadata'.format(arg.type))
+
+    def test_metadata_v11(self):
+        metadata_decoder = MetadataDecoder(ScaleBytes(metadata_v11_hex))
+        metadata_decoder.decode()
+        self.assertEqual(metadata_decoder.version.value, "MetadataV11Decoder")
+
+        for module in metadata_decoder.metadata.modules:
+            if module.calls:
+                for call in module.calls:
+                    for arg in call.args:
+                        decoder_class = ScaleDecoder.get_decoder_class(arg.type)
+                        self.assertIsNotNone(decoder_class, msg='{} is not supported by metadata'.format(arg.type))
+
+    def test_metadata_v12(self):
+        metadata_decoder = MetadataDecoder(ScaleBytes(metadata_v12_hex))
+        metadata_decoder.decode()
+        self.assertEqual(metadata_decoder.version.value, "MetadataV12Decoder")
+
+        for module in metadata_decoder.metadata.modules:
+            if module.calls:
+                for call in module.calls:
+                    for arg in call.args:
+                        decoder_class = ScaleDecoder.get_decoder_class(arg.type)
+                        self.assertIsNotNone(decoder_class, msg='{} is not supported by metadata'.format(arg.type))
