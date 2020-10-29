@@ -1180,6 +1180,6 @@
       "value_list": ["Other", "Distribution", "Sto", "Exchange"]
     },
     "CompactAssignments": "CompactAssignmentsFrom258",
-    "RefCount": "u32"
+    "RefCount": "RefCountTo259"
   }
 }
