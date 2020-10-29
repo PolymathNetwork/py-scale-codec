@@ -1,5 +1,5 @@
 {
-  "runtime_id": 18,
+  "runtime_id": 25,
   "types": {
     "Address": "AccountIdAddress",
     "BlockNumber": "U32",
@@ -34,7 +34,9 @@
         "SudoBalances",
         "IdentityJudgement"
       ]
-    }
+    },
+    "CompactAssignments": "CompactAssignmentsFrom258",
+    "RefCount": "u32"
   },
   "versioning": [
     {
@@ -79,6 +81,18 @@
       "runtime_range": [23, null],
       "types": {
         "CompactAssignments": "CompactAssignmentsFrom258"
+      }
+    },
+    {
+      "runtime_range": [0, 24],
+      "types": {
+        "RefCount": "u8"
+      }
+    },
+    {
+      "runtime_range": [25, null],
+      "types": {
+        "RefCount": "u32"
       }
     }
   ]
