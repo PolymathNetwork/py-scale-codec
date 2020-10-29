@@ -1,20 +1,18 @@
 # Python SCALE Codec Library
 #
-# Copyright 2018-2020 openAware BV (NL).
-# This file is part of Polkascan.
+# Copyright 2018-2020 Stichting Polkascan (Polkascan Foundation).
 #
-# Polkascan is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# Polkascan is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# http://www.apache.org/licenses/LICENSE-2.0
 #
-# You should have received a copy of the GNU General Public License
-# along with Polkascan. If not, see <http://www.gnu.org/licenses/>.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import datetime
 import unittest
@@ -295,7 +293,6 @@ class TestScaleTypes(unittest.TestCase):
 
         self.assertEqual(multi_sig_address, "HFXXfXavDuKhLLBhFQTat2aaRQ5CMMw9mwswHzWi76m6iLt")
 
-
     def test_opaque_call(self):
 
         opaque_call_obj = ScaleDecoder.get_decoder_class('OpaqueCall', metadata=self.metadata_decoder)
@@ -327,7 +324,7 @@ class TestScaleTypes(unittest.TestCase):
         self.assertEqual(obj.value, '00')
         self.assertIsNone(obj.period)
         self.assertIsNone(obj.phase)
-    
+
     def test_era_mortal(self):
         obj = ScaleDecoder.get_decoder_class('Era', ScaleBytes('0x4e9c'))
         obj.decode()
@@ -361,3 +358,16 @@ class TestScaleTypes(unittest.TestCase):
         self.assertEqual(obj.birth(1410), 1400)
         self.assertEqual(obj.birth(1399), 1144)
         self.assertEqual(obj.death(1400), 1656)
+
+    def test_era_invalid_encode(self):
+        obj = ScaleDecoder.get_decoder_class('Era')
+        self.assertRaises(ValueError, obj.encode, (1, 120))
+        self.assertRaises(ValueError, obj.encode, ('64', 60))
+        self.assertRaises(ValueError, obj.encode, 'x')
+        self.assertRaises(ValueError, obj.encode, {'phase': 2})
+        self.assertRaises(ValueError, obj.encode, {'period': 2})
+
+    def test_era_invalid_decode(self):
+        obj = ScaleDecoder.get_decoder_class('Era', ScaleBytes('0x0101'))
+        self.assertRaises(ValueError, obj.decode)
+
