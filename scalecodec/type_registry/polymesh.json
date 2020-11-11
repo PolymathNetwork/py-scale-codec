@@ -458,8 +458,8 @@
     "ComplianceRequirementResult": {
       "type": "struct",
       "type_mapping": [
-        ["sender_conditions", "Vec<Condition>"],
-        ["receiver_conditions", "Vec<Condition>"],
+        ["sender_conditions", "Vec<ConditionResult>"],
+        ["receiver_conditions", "Vec<ConditionResult>"],
         ["id", "u32"],
         ["result", "bool"]
       ]
