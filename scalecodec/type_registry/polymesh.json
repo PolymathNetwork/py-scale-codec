@@ -1,7 +1,8 @@
 {
   "types": {
     "IdentityId": "H256",
-    "InvestorUid": "H256",
+    "EventDid": "IdentityId",
+    "InvestorUid": "[u8; 16]",
     "Ticker": "Ticker",
     "CddId": "H256",
     "ScopeId": "H256",
@@ -13,14 +14,19 @@
       ]
     },
     "PosRatio": "(u32, u32)",
+    "DocumentId": "u32",
     "DocumentName": "String",
     "DocumentUri": "String",
     "DocumentHash": "String",
+    "DocumentType": "String",
     "Document": {
       "type": "struct",
       "type_mapping": [
         ["uri", "DocumentUri"],
-        ["content_hash", "DocumentHash"]
+        ["content_hash", "DocumentHash"],
+        ["name", "DocumentName"],
+        ["doc_type", "Option<DocumentType>"],
+        ["filing_date", "Option<Moment>"]
       ]
     },
     "AssetType": {
@@ -46,7 +52,7 @@
         ["ISIN", "[u8; 12]"],
         ["LEI", "[u8; 20]"]
       ]
-    },          
+    },
     "AssetOwnershipRelation": {
       "type": "enum",
       "type_mapping": [
@@ -69,16 +75,23 @@
         ["primary_issuance_agent", "Option<IdentityId>"]
       ]
     },
-    "LinkedKeyInfo": {
-      "type": "enum",
+    "PalletName": "String",
+    "DispatchableName": "String",
+    "PalletPermissions": {
+      "type": "struct",
       "type_mapping": [
-        ["Unique", "IdentityId"],
-        ["Group", "Vec<IdentityId>"]
+        ["pallet_name", "PalletName"],
+        ["total", "bool"],
+        ["dispatchable_names", "Vec<DispatchableName>"]
       ]
     },
-    "Permission": {
-      "type": "enum",
-      "value_list": ["Full", "Admin", "Operator", "SpendFunds"]
+    "Permissions": {
+      "type": "struct",
+      "type_mapping": [
+        ["asset", "Option<Vec<Ticker>>"],
+        ["extrinsic", "Option<Vec<PalletPermissions>>"],
+        ["portfolio", "Option<Vec<PortfolioId>>"]
+      ]
     },
     "Signatory": {
       "type": "enum",
@@ -91,7 +104,7 @@
       "type": "struct",
       "type_mapping": [
         ["signer", "Signatory"],
-        ["permissions", "Vec<Permission>"]
+        ["permissions", "Permissions"]
       ]
     },
     "SecondaryKeyWithAuth": {
@@ -126,7 +139,6 @@
     "DidRecord": {
       "type": "struct",
       "type_mapping": [
-        ["roles", "Vec<IdentityRole>"],
         ["primary_key", "AccountId"],
         ["secondary_key", "Vec<SecondaryKey>"]
       ]
@@ -135,7 +147,7 @@
       "type": "struct",
       "type_mapping": [
         ["identity", "IdentityId"],
-        ["permissions", "Option<Vec<Permission>>"]
+        ["permissions", "Option<Permissions>"]
       ]
     },
     "CountryCode": {
@@ -411,7 +423,7 @@
         ["Jurisdiction", "(CountryCode, Scope)"],
         ["Exempted", "Scope"],
         ["Blocked", "Scope"],
-        ["InvestorZKProof", "(Scope, ScopeId, CddId, InvestorZKProofData)"],
+        ["InvestorUniqueness", "(Scope, ScopeId, CddId)"],
         ["NoData", "Null"]
       ]
     },
@@ -427,7 +439,8 @@
         ["Jurisdiction", "Null"],
         ["Exempted", "Null"],
         ["Blocked", "Null"],
-        ["NoType", "Null"]
+        ["InvestorUniqueness", "Null"],
+        ["NoData", "Null"]
       ]
     },
     "IdentityClaim": {
