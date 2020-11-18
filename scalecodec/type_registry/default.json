@@ -229,8 +229,43 @@
         ]
       ]
     },
+    "RawOrigin": {
+      "type": "enum",
+      "type_mapping": [
+        [
+          "Root",
+          "Null"
+        ],
+        [
+          "Signed",
+          "AccountId"
+        ],
+        [
+          "None",
+          "Null"
+        ]
+      ]
+    },
     "RefCount": "u32",
     "RefCountTo259": "u8",
+    "SyncState": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "startingBlock",
+          "BlockNumber"
+        ],
+        [
+          "currentBlock",
+          "BlockNumber"
+        ],
+        [
+          "highestBlock",
+          "Option<BlockNumber>"
+        ]
+      ]
+    },
+    "SystemOrigin": "RawOrigin",
     "Moment": "u64",
     "AccountData": {
       "type": "struct",
@@ -511,6 +546,7 @@
     },
     "EventIndex": "u32",
     "Extrinsic": "ExtrinsicsDecoder",
+    "ExtrinsicSignature": "MultiSignature",
     "ExtrinsicPayloadValue": {
       "type": "struct",
       "type_mapping": [
@@ -676,6 +712,19 @@
     },
     "MaybeVrf": "Option<VrfData>",
     "MemberCount": "u32",
+    "CollectiveOrigin": {
+      "type": "enum",
+      "type_mapping": [
+        [
+          "Members",
+          "(MemberCount, MemberCount)"
+        ],
+        [
+          "Member",
+          "AccountId"
+        ]
+      ]
+    },
     "MomentOf": "Moment",
     "MoreAttestations": {
       "type": "struct",
@@ -1057,7 +1106,7 @@
       ]
     },
     "ReportIdOf": "Hash",
-    "Schedule": {
+    "ScheduleTo258": {
       "type": "struct",
       "type_mapping": [
         [
@@ -1123,6 +1172,31 @@
         [
           "maxSubjectLen",
           "u32"
+        ]
+      ]
+    },
+    "Schedule": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "version",
+          "u32"
+        ],
+        [
+          "enablePrintln",
+          "bool"
+        ],
+        [
+          "limits",
+          "Limits"
+        ],
+        [
+          "instructionWeights",
+          "InstructionWeights"
+        ],
+        [
+          "hostFnWeights",
+          "HostFnWeights"
         ]
       ]
     },
@@ -1889,7 +1963,7 @@
         ]
       ]
     },
-    "CompactAssignments": "CompactAssignmentsTo257",
+    "CompactAssignments": "CompactAssignmentsFrom258",
     "DeferredOffenceOf": {
       "type": "struct",
       "type_mapping": [
@@ -2125,6 +2199,7 @@
       ]
     },
     "ModuleId": "LockIdentifier",
+    "MultiAddress": "GenericMultiAddress",
     "RuntimeDbWeight": {
       "type": "struct",
       "type_mapping": [
@@ -2217,6 +2292,145 @@
         [
           "nominators",
           "Compact<NominatorIndex>"
+        ]
+      ]
+    },
+    "SiField": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "name",
+          "Option<Text>"
+        ],
+        [
+          "type",
+          "SiLookupTypeId"
+        ]
+      ]
+    },
+    "SiLookupTypeId": "u32",
+    "SiPath": "Vec<Text>",
+    "SiType": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "path",
+          "SiPath"
+        ],
+        [
+          "params",
+          "Vec<SiLookupTypeId>"
+        ],
+        [
+          "def",
+          "SiTypeDef"
+        ]
+      ]
+    },
+    "SiTypeDef": {
+      "type": "enum",
+      "type_mapping": [
+        [
+          "Composite",
+          "SiTypeDefComposite"
+        ],
+        [
+          "Variant",
+          "SiTypeDefVariant"
+        ],
+        [
+          "Sequence",
+          "SiTypeDefSequence"
+        ],
+        [
+          "Array",
+          "SiTypeDefArray"
+        ],
+        [
+          "Tuple",
+          "SiTypeDefTuple"
+        ],
+        [
+          "Primitive",
+          "SiTypeDefPrimitive"
+        ]
+      ]
+    },
+    "SiTypeDefArray": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "len",
+          "u16"
+        ],
+        [
+          "type",
+          "SiLookupTypeId"
+        ]
+      ]
+    },
+    "SiTypeDefComposite": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "fields",
+          "Vec<SiField>"
+        ]
+      ]
+    },
+    "SiTypeDefVariant": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "variants",
+          "Vec<SiVariant>"
+        ]
+      ]
+    },
+    "SiTypeDefPrimitive": {
+      "type": "enum",
+      "value_list": [
+        "Bool",
+        "Char",
+        "Str",
+        "U8",
+        "U16",
+        "U32",
+        "U64",
+        "U128",
+        "U256",
+        "I8",
+        "I16",
+        "I32",
+        "I64",
+        "I128",
+        "I256"
+      ]
+    },
+    "SiTypeDefSequence": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "type",
+          "SiLookupTypeId"
+        ]
+      ]
+    },
+    "SiTypeDefTuple": "Vec<SiLookupTypeId>",
+    "SiVariant": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "name",
+          "Text"
+        ],
+        [
+          "fields",
+          "Vec<SiField>"
+        ],
+        [
+          "discriminant",
+          "Option<u64>"
         ]
       ]
     },
@@ -2322,6 +2536,7 @@
     "EcdsaSignature": "[u8; 65]",
     "Ed25519Signature": "H512",
     "Sr25519Signature": "H512",
+    "AnySignature": "H512",
     "MultiSignature": {
       "type": "enum",
       "type_mapping": [
@@ -2341,6 +2556,16 @@
     },
     "schedule::period<blocknumber>": "(BlockNumber, u32)",
     "OpaqueCall": "OpaqueCall",
+    "OriginCaller": {
+      "type": "enum",
+      "type_mapping": [
+        [
+          "System",
+          "SystemOrigin"
+        ]
+      ]
+    },
+    "PalletsOrigin": "OriginCaller",
     "PalletVersion": {
       "type": "struct",
       "type_mapping": [
@@ -2514,6 +2739,14 @@
           "u32"
         ],
         [
+          "emptyPairCount",
+          "u32"
+        ],
+        [
+          "totalPairCount",
+          "u32"
+        ],
+        [
           "codeHash",
           "CodeHash"
         ],
@@ -2557,7 +2790,7 @@
         ]
       ]
     },
-    "ContractExecResultSuccess": {
+    "ContractExecResultSuccessTo260": {
       "type": "struct",
       "type_mapping": [
         [
@@ -2566,7 +2799,7 @@
         ],
         [
           "data",
-          "Vec<u8>"
+          "Bytes"
         ],
         [
           "gasConsumed",
@@ -2574,12 +2807,12 @@
         ]
       ]
     },
-    "ContractExecResult": {
+    "ContractExecResultTo260": {
       "type": "enum",
       "type_mapping": [
         [
           "Success",
-          "ContractExecResultSuccess"
+          "ContractExecResultSuccessTo260"
         ],
         [
           "Error",
@@ -2587,7 +2820,523 @@
         ]
       ]
     },
+    "ContractExecResultErrModule": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "index",
+          "u8"
+        ],
+        [
+          "error",
+          "u8"
+        ],
+        [
+          "message",
+          "Option<Text>"
+        ]
+      ]
+    },
+    "ContractExecResultErr": {
+      "type": "enum",
+      "type_mapping": [
+        [
+          "Other",
+          "Text"
+        ],
+        [
+          "CannotLookup",
+          "Null"
+        ],
+        [
+          "BadOrigin",
+          "Null"
+        ],
+        [
+          "Module",
+          "ContractExecResultErrModule"
+        ]
+      ]
+    },
+    "ContractExecResultOk": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "flags",
+          "u32"
+        ],
+        [
+          "data",
+          "Bytes"
+        ]
+      ]
+    },
+    "ContractExecResultResult": {
+      "type": "enum",
+      "type_mapping": [
+        [
+          "Ok",
+          "ContractExecResultOk"
+        ],
+        [
+          "Err",
+          "ContractExecResultErr"
+        ]
+      ]
+    },
+    "ContractExecResult": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "gasConsumed",
+          "u64"
+        ],
+        [
+          "debugMessage",
+          "Text"
+        ],
+        [
+          "result",
+          "ContractExecResultResult"
+        ]
+      ]
+    },
     "ContractStorageKey": "[u8; 32]",
+    "HostFnWeights": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "caller",
+          "Weight"
+        ],
+        [
+          "address",
+          "Weight"
+        ],
+        [
+          "gasLeft",
+          "Weight"
+        ],
+        [
+          "balance",
+          "Weight"
+        ],
+        [
+          "valueTransferred",
+          "Weight"
+        ],
+        [
+          "minimumBalance",
+          "Weight"
+        ],
+        [
+          "tombstoneDeposit",
+          "Weight"
+        ],
+        [
+          "rentAllowance",
+          "Weight"
+        ],
+        [
+          "blockNumber",
+          "Weight"
+        ],
+        [
+          "now",
+          "Weight"
+        ],
+        [
+          "weightToFee",
+          "Weight"
+        ],
+        [
+          "gas",
+          "Weight"
+        ],
+        [
+          "input",
+          "Weight"
+        ],
+        [
+          "inputPerByte",
+          "Weight"
+        ],
+        [
+          "return",
+          "Weight"
+        ],
+        [
+          "returnPerByte",
+          "Weight"
+        ],
+        [
+          "terminate",
+          "Weight"
+        ],
+        [
+          "restoreTo",
+          "Weight"
+        ],
+        [
+          "restoreToPerDelta",
+          "Weight"
+        ],
+        [
+          "random",
+          "Weight"
+        ],
+        [
+          "depositEvent",
+          "Weight"
+        ],
+        [
+          "depositEventPerTopic",
+          "Weight"
+        ],
+        [
+          "depositEventPerByte",
+          "Weight"
+        ],
+        [
+          "setRentAllowance",
+          "Weight"
+        ],
+        [
+          "setStorage",
+          "Weight"
+        ],
+        [
+          "setStoragePerByte",
+          "Weight"
+        ],
+        [
+          "clearStorage",
+          "Weight"
+        ],
+        [
+          "getStorage",
+          "Weight"
+        ],
+        [
+          "getStoragePerByte",
+          "Weight"
+        ],
+        [
+          "transfer",
+          "Weight"
+        ],
+        [
+          "call",
+          "Weight"
+        ],
+        [
+          "callTransferSurcharge",
+          "Weight"
+        ],
+        [
+          "callPerInputByte",
+          "Weight"
+        ],
+        [
+          "callPerOutputByte",
+          "Weight"
+        ],
+        [
+          "instantiate",
+          "Weight"
+        ],
+        [
+          "instantiatePerInputByte",
+          "Weight"
+        ],
+        [
+          "instantiatePerOutputByte",
+          "Weight"
+        ],
+        [
+          "hashSha2256",
+          "Weight"
+        ],
+        [
+          "hashSha2256PerByte",
+          "Weight"
+        ],
+        [
+          "hashKeccak256",
+          "Weight"
+        ],
+        [
+          "hashKeccak256PerByte",
+          "Weight"
+        ],
+        [
+          "hashBlake2256",
+          "Weight"
+        ],
+        [
+          "hashBlake2256PerByte",
+          "Weight"
+        ],
+        [
+          "hashBlake2128",
+          "Weight"
+        ],
+        [
+          "hashBlake2128PerByte",
+          "Weight"
+        ]
+      ]
+    },
+    "InstructionWeights": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "i64const",
+          "u32"
+        ],
+        [
+          "i64load",
+          "u32"
+        ],
+        [
+          "i64store",
+          "u32"
+        ],
+        [
+          "select",
+          "u32"
+        ],
+        [
+          "rIf",
+          "u32"
+        ],
+        [
+          "br",
+          "u32"
+        ],
+        [
+          "brIf",
+          "u32"
+        ],
+        [
+          "brIable",
+          "u32"
+        ],
+        [
+          "brIablePerEntry",
+          "u32"
+        ],
+        [
+          "call",
+          "u32"
+        ],
+        [
+          "callIndirect",
+          "u32"
+        ],
+        [
+          "callIndirectPerParam",
+          "u32"
+        ],
+        [
+          "localGet",
+          "u32"
+        ],
+        [
+          "localSet",
+          "u32"
+        ],
+        [
+          "local_tee",
+          "u32"
+        ],
+        [
+          "globalGet",
+          "u32"
+        ],
+        [
+          "globalSet",
+          "u32"
+        ],
+        [
+          "memoryCurrent",
+          "u32"
+        ],
+        [
+          "memoryGrow",
+          "u32"
+        ],
+        [
+          "i64clz",
+          "u32"
+        ],
+        [
+          "i64ctz",
+          "u32"
+        ],
+        [
+          "i64popcnt",
+          "u32"
+        ],
+        [
+          "i64eqz",
+          "u32"
+        ],
+        [
+          "i64extendsi32",
+          "u32"
+        ],
+        [
+          "i64extendui32",
+          "u32"
+        ],
+        [
+          "i32wrapi64",
+          "u32"
+        ],
+        [
+          "i64eq",
+          "u32"
+        ],
+        [
+          "i64ne",
+          "u32"
+        ],
+        [
+          "i64lts",
+          "u32"
+        ],
+        [
+          "i64ltu",
+          "u32"
+        ],
+        [
+          "i64gts",
+          "u32"
+        ],
+        [
+          "i64gtu",
+          "u32"
+        ],
+        [
+          "i64les",
+          "u32"
+        ],
+        [
+          "i64leu",
+          "u32"
+        ],
+        [
+          "i64ges",
+          "u32"
+        ],
+        [
+          "i64geu",
+          "u32"
+        ],
+        [
+          "i64add",
+          "u32"
+        ],
+        [
+          "i64sub",
+          "u32"
+        ],
+        [
+          "i64mul",
+          "u32"
+        ],
+        [
+          "i64divs",
+          "u32"
+        ],
+        [
+          "i64divu",
+          "u32"
+        ],
+        [
+          "i64rems",
+          "u32"
+        ],
+        [
+          "i64remu",
+          "u32"
+        ],
+        [
+          "i64and",
+          "u32"
+        ],
+        [
+          "i64or",
+          "u32"
+        ],
+        [
+          "i64xor",
+          "u32"
+        ],
+        [
+          "i64shl",
+          "u32"
+        ],
+        [
+          "i64shrs",
+          "u32"
+        ],
+        [
+          "i64shru",
+          "u32"
+        ],
+        [
+          "i64rotl",
+          "u32"
+        ],
+        [
+          "i64rotr",
+          "u32"
+        ]
+      ]
+    },
+    "Limits": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "eventTopics",
+          "u32"
+        ],
+        [
+          "stackHeight",
+          "u32"
+        ],
+        [
+          "globals",
+          "u32"
+        ],
+        [
+          "parameters",
+          "u32"
+        ],
+        [
+          "memoryPages",
+          "u32"
+        ],
+        [
+          "tableSize",
+          "u32"
+        ],
+        [
+          "brTableSize",
+          "u32"
+        ],
+        [
+          "subjectLen",
+          "u32"
+        ],
+        [
+          "codeSize",
+          "u32"
+        ]
+      ]
+    },
     "PrefabWasmModule": {
       "type": "struct",
       "type_mapping": [
@@ -2741,6 +3490,89 @@
     },
     "StorageKey": "Bytes",
     "PrefixedStorageKey": "StorageKey",
+    "ContractProject": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "metadataVersion",
+          "Text"
+        ],
+        [
+          "source",
+          "ContractProjectSource"
+        ],
+        [
+          "contract",
+          "ContractProjectContract"
+        ],
+        [
+          "types",
+          "Vec<SiType>"
+        ],
+        [
+          "spec",
+          "ContractContractSpec"
+        ]
+      ]
+    },
+    "ContractProjectContract": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "name",
+          "Text"
+        ],
+        [
+          "version",
+          "Text"
+        ],
+        [
+          "authors",
+          "Vec<Text>"
+        ],
+        [
+          "description",
+          "Option<Text>"
+        ],
+        [
+          "documentation",
+          "Option<Text>"
+        ],
+        [
+          "repository",
+          "Option<Text>"
+        ],
+        [
+          "homepage",
+          "Option<Text>"
+        ],
+        [
+          "license",
+          "Option<Text>"
+        ]
+      ]
+    },
+    "ContractProjectSource": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "hash",
+          "[u8; 32]"
+        ],
+        [
+          "language",
+          "Text"
+        ],
+        [
+          "compiler",
+          "Text"
+        ],
+        [
+          "wasm",
+          "Raw"
+        ]
+      ]
+    },
     "AccountIndex": "GenericAccountIndex",
     "Address": "GenericAddress",
     "AssetId": "u32",
@@ -2789,6 +3621,31 @@
     "SchedulePeriod": "Period",
     "SchedulePriority": "Priority",
     "Scheduled": {
+      "type": "struct",
+      "type_mapping": [
+        [
+          "maybeId",
+          "Option<Bytes>"
+        ],
+        [
+          "priority",
+          "SchedulePriority"
+        ],
+        [
+          "call",
+          "Call"
+        ],
+        [
+          "maybePeriodic",
+          "Option<SchedulePeriod>"
+        ],
+        [
+          "origin",
+          "PalletsOrigin"
+        ]
+      ]
+    },
+    "ScheduledTo254": {
       "type": "struct",
       "type_mapping": [
         [
@@ -3747,11 +4604,11 @@
       "type_mapping": [
         [
           "nonce",
-          "U256"
+          "u256"
         ],
         [
           "balance",
-          "U256"
+          "u256"
         ]
       ]
     },
@@ -3777,7 +4634,7 @@
       "type_mapping": [
         [
           "gasPrice",
-          "U256"
+          "u256"
         ],
         [
           "origin",
