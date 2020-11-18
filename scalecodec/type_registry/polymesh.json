@@ -487,13 +487,12 @@
         ["IsIdentity", "TargetIdentity"]
       ]
     },
-
     "TrustedFor": {
       "type": "enum",
       "type_mapping": [
         ["Any", "Null"],
         ["Specific", "Vec<ClaimType>"]
-      ]      
+      ]
     },
     "TrustedIssuer": {
       "type": "struct",
@@ -502,7 +501,6 @@
         ["trusted_for", "TrustedFor"]
       ]
     },
-    
     "Condition": {
       "type": "struct",
       "type_mapping": [
@@ -609,7 +607,6 @@
         ["motions", "Vec<Motion>"]
       ]
     },
-
     "BallotTitle": "String",
     "BallotMeta": {
       "type": "struct",
@@ -638,8 +635,7 @@
         ["Some", "BlockNumber"],
         ["None", "Null"]
       ]
-    },    
-
+    },
     "Url": "String",
     "PipDescription": "String",
     "PipsMetadata": {
@@ -822,7 +818,6 @@
         ["is_archive", "bool"]
       ]
     },
-
     "MetaUrl": "String",
     "MetaDescription": "String",
     "MetaVersion": "u32",
@@ -845,8 +840,6 @@
         ["frozen", "bool"]
       ]
     },
-    
-
     "ProportionMatch": {
       "type": "enum",
       "value_list": ["AtLeast", "MoreThan"]
@@ -1336,17 +1329,17 @@
     "TargetTreatment": {
       "type": "enum",
       "value_list": [
-        "Include", 
+        "Include",
         "Exclude"
       ]
     },
     "CAKind": {
       "type": "enum",
       "value_list": [
-        "PredictableBenefit", 
-        "UnpredictableBenfit", 
-        "IssuerNotice", 
-        "Reorganization", 
+        "PredictableBenefit",
+        "UnpredictableBenfit",
+        "IssuerNotice",
+        "Reorganization",
         "Other"
       ]
     },
@@ -1406,8 +1399,8 @@
     "SlashingSwitch": {
       "type": "enum",
       "value_list": [
-        "Validator", 
-        "ValidatorAndNominator", 
+        "Validator",
+        "ValidatorAndNominator",
         "None"
       ]
     },
@@ -1417,7 +1410,7 @@
         ["total", "Balance"],
         ["price", "Balance"]
       ]
-    },    
+    },
     "CompactAssignments": "CompactAssignmentsFrom258",
     "RefCount": "RefCountTo259"
   }
