@@ -246,7 +246,7 @@
         ]
       ]
     },
-    "RefCount": "u32",
+    "RefCount": "u8",
     "RefCountTo259": "u8",
     "SyncState": {
       "type": "struct",
