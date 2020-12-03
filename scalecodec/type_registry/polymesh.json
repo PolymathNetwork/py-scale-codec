@@ -1059,10 +1059,11 @@
       ]
     },
     "HandledTxStatus": {
-        "_enum": {
-            "Success": "",
-            "Error": "Text"
-        }
+      "type": "enum",
+      "type_mapping": [
+        ["Success", "Null"],
+        ["Error", "String"]
+      ]
     },
     "CappedFee": "u64",
     "CanTransferResult": {
