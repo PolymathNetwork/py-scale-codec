@@ -29,6 +29,7 @@
         ["filing_date", "Option<Moment>"]
       ]
     },
+    "Version": "u8",
     "AssetType": {
       "type": "enum",
       "type_mapping": [
@@ -81,8 +82,7 @@
       "type": "struct",
       "type_mapping": [
         ["pallet_name", "PalletName"],
-        ["total", "bool"],
-        ["dispatchable_names", "Vec<DispatchableName>"]
+        ["dispatchable_names", "Option<Vec<DispatchableName>>"]
       ]
     },
     "Permissions": {
@@ -90,6 +90,22 @@
       "type_mapping": [
         ["asset", "Option<Vec<Ticker>>"],
         ["extrinsic", "Option<Vec<PalletPermissions>>"],
+        ["portfolio", "Option<Vec<PortfolioId>>"]
+      ]
+    },
+    "LegacyPalletPermissions": {
+      "type": "struct",
+      "type_mapping": [
+        ["pallet_name", "PalletName"],
+        ["total", "bool"],
+        ["dispatchable_names", "Vec<DispatchableName>"]
+      ]
+    },
+    "LegacyPermissions": {
+      "type": "struct",
+      "type_mapping": [
+        ["asset", "Option<Vec<Ticker>>"],
+        ["extrinsic", "Option<Vec<LegacyPalletPermissions>>"],
         ["portfolio", "Option<Vec<PortfolioId>>"]
       ]
     },
@@ -715,7 +731,7 @@
     "PipId": "u32",
     "ProposalState": {
       "type": "enum",
-      "value_list": ["Pending", "Cancelled", "Rejected", "Scheduled", "Failed", "Executed", "Expired"]
+      "value_list": ["Pending", "Rejected", "Scheduled", "Failed", "Executed", "Expired"]
     },
     "ReferendumState": {
       "type": "enum",
@@ -731,8 +747,7 @@
         ["id", "PipId"],
         ["proposal", "Call"],
         ["state", "ProposalState"],
-        ["proposer", "Proposer"],
-        ["cool_off_until", "u32"]
+        ["proposer", "Proposer"]
       ]
     },
     "ProposalData" : {
@@ -956,8 +971,8 @@
         "AssetRegisterTicker",
         "AssetIssue",
         "AssetAddDocuments",
-        "AssetCheckpoint",
         "AssetCreateAsset",
+        "AssetCreateCheckpointSchedule",
         "DividendNew",
         "ComplianceManagerAddComplianceRequirement",
         "IdentityRegisterDid",
@@ -966,7 +981,10 @@
         "IdentitySetPrimaryKey",
         "IdentityAddSecondaryKeysWithAuthorization",
         "PipsPropose",
-        "VotingAddBallot"
+        "VotingAddBallot",
+        "ContractsPutCode",
+        "BallotAttachBallot",
+        "DistributionDistribute"
       ]
     },
     "CddStatus": {
@@ -1039,6 +1057,12 @@
         ["Timelocked", "Null"],
         ["Handled", "Null"]
       ]
+    },
+    "HandledTxStatus": {
+        "_enum": {
+            "Success": "",
+            "Error": "Text"
+        }
     },
     "CappedFee": "u64",
     "CanTransferResult": {
@@ -1147,7 +1171,7 @@
       "type": "struct",
       "type_mapping": [
         ["unit", "CalendarUnit"],
-        ["amount", "Option<NonZeroU64>"]
+        ["amount", "u64"]
       ]
     },
     "CheckpointSchedule": {
@@ -1324,7 +1348,7 @@
     "TargetIdentities": {
       "type": "struct",
       "type_mapping": [
-        ["identities", "Vec<IdentitityId>"],
+        ["identities", "Vec<IdentityId>"],
         ["treatment", "TargetTreatment"]
       ]
     },
@@ -1371,6 +1395,7 @@
       "type": "struct",
       "type_mapping": [
         ["kind", "CAKind"],
+        ["decl_date", "Moment"],
         ["record_date", "Option<RecordDate>"],
         ["details", "String"],
         ["targets", "TargetIdentities"],
