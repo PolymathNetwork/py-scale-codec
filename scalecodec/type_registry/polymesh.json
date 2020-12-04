@@ -1440,6 +1440,7 @@
       ]
     },
     "CompactAssignments": "CompactAssignmentsFrom258",
-    "RefCount": "RefCount"
+    "RefCount": "RefCount",
+    "secondary_key::api::LegacyPermissions": "LegacyPermissions"
   }
 }
