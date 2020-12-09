@@ -16,6 +16,9 @@
 
 from datetime import datetime
 from hashlib import blake2b
+
+from scalecodec.utils.ss58 import ss58_decode_account_index
+
 from scalecodec.base import ScaleType, ScaleBytes
 from scalecodec.exceptions import InvalidScaleTypeValueException
 from scalecodec.utils.math import trailing_zeros, next_power_of_two
@@ -211,11 +214,15 @@ class String(ScaleType):
 
 class HexBytes(ScaleType):
 
+    def __init__(self, *args, **kwargs):
+        self.length_obj = None
+        super().__init__(*args, **kwargs)
+
     def process(self):
 
-        length = self.process_type('Compact<u32>').value
+        self.length_obj = self.process_type('Compact<u32>')
 
-        return '0x{}'.format(self.get_next_bytes(length).hex())
+        return '0x{}'.format(self.get_next_bytes(self.length_obj.value).hex())
 
     def process_encode(self, value):
 
@@ -1375,3 +1382,23 @@ class Ticker(ScaleType):
         if value[0:2] != '0x' and len(value) == 26:
             raise ValueError('Value should start with "0x" and should be 12 bytes long')
         return ScaleBytes(value)
+
+
+class GenericMultiAddress(Enum):
+    type_mapping = [
+        ["Id", "AccountId"],
+        ["Index", "Compact<AccountIndex>"],
+        ["Raw", "Bytes"],
+        ["Address32", "H256"],
+        ["Address20", "H160"],
+      ]
+
+    def process_encode(self, value):
+
+        if type(value) == str:
+            if len(value) <= 8:
+                value = {"Index": ss58_decode_account_index(value)}
+            else:
+                value = {"Id": value}
+
+        return super().process_encode(value)

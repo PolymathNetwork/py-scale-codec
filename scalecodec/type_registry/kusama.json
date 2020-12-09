@@ -1,5 +1,5 @@
 {
-  "runtime_id": 2025,
+  "runtime_id": 2026,
   "types": {
     "Address": "AccountIdAddress",
     "BlockNumber": "U32",
@@ -34,7 +34,6 @@
         "IdentityJudgement"
       ]
     },
-    "CompactAssignments": "CompactAssignmentsFrom258",
     "RefCount": "u32"
   },
   "versioning": [
