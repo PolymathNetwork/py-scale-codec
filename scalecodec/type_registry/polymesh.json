@@ -17,7 +17,20 @@
     "DocumentId": "u32",
     "DocumentName": "String",
     "DocumentUri": "String",
-    "DocumentHash": "String",
+    "DocumentHash": {
+      "type": "enum",
+      "type_mapping": [
+        ["None", "Null"],
+        ["H512", "[u8; 64]"],
+        ["H384", "[u8; 48]"],
+        ["H320", "[u8; 40]"],
+        ["H256", "[u8; 32]"],
+        ["H224", "[u8; 28]"],
+        ["H192", "[u8; 24]"],
+        ["H160", "[u8; 20]"],
+        ["H128", "[u8; 16]"]
+      ]
+    },
     "DocumentType": "String",
     "Document": {
       "type": "struct",
@@ -531,27 +544,6 @@
         ["result", "bool"]
       ]
     },
-    "STO": {
-      "type": "struct",
-      "type_mapping": [
-        ["beneficiary_did", "IdentityId"],
-        ["cap", "Balance"],
-        ["sold", "Balance"],
-        ["rate", "u64"],
-        ["start_date", "Moment"],
-        ["end_date", "Moment"],
-        ["active", "bool"]
-      ]
-    },
-    "Investment": {
-      "type": "struct",
-      "type_mapping": [
-        ["investor_did", "IdentityId"],
-        ["amount_paid", "Balance"],
-        ["assets_purchased", "Balance"],
-        ["last_purchase_date", "Moment"]
-      ]
-    },
     "SimpleTokenRecord": {
       "type": "struct",
       "type_mapping": [
@@ -561,17 +553,6 @@
       ]
     },
     "FeeOf": "Balance",
-    "Dividend": {
-      "type": "struct",
-      "type_mapping": [
-        ["amount", "Balance"],
-        ["active", "bool"],
-        ["maturates_at", "Option<Moment>"],
-        ["expires_at", "Option<Moment>"],
-        ["payout_currency", "Option<Ticker>"],
-        ["checkpoint_id", "u64"]
-      ]
-    },
     "TargetIdAuthorization": {
       "type": "struct",
       "type_mapping": [
@@ -612,15 +593,6 @@
         ["title", "MotionTitle"],
         ["info_link", "MotionInfoLink"],
         ["choices", "Vec<ChoiceTitle>"]
-      ]
-    },
-    "Ballot": {
-      "type": "struct",
-      "type_mapping": [
-        ["checkpoint_id", "u64"],
-        ["voting_start", "Moment"],
-        ["voting_end", "Moment"],
-        ["motions", "Vec<Motion>"]
       ]
     },
     "BallotTitle": "String",
@@ -733,14 +705,6 @@
       "type": "enum",
       "value_list": ["Pending", "Rejected", "Scheduled", "Failed", "Executed", "Expired"]
     },
-    "ReferendumState": {
-      "type": "enum",
-      "value_list": ["Pending", "Scheduled", "Rejected", "Failed", "Executed"]
-    },
-    "ReferendumType": {
-      "type": "enum",
-      "value_list": ["FastTracked", "Emergency", "Community"]
-    },
     "Pip": {
       "type": "struct",
       "type_mapping": [
@@ -755,15 +719,6 @@
       "type_mapping": [
           ["Hash", "Hash"],
           ["Proposal", "HexBytes"]
-      ]
-    },
-    "Referendum": {
-      "type": "struct",
-      "type_mapping": [
-        ["id", "PipId"],
-        ["state", "ReferendumState"],
-        ["referendum_type", "ReferendumType"],
-        ["enactment_period", "u32"]
       ]
     },
     "TickerTransferApproval": {
@@ -861,11 +816,12 @@
     },
     "AuthorizationNonce": "u64",
     "Counter": "u64",
-    "Commission": {
+    "Percentage": "Permill",
+    "TransferManager": {
       "type": "enum",
       "type_mapping": [
-        ["Individual", "Null"],
-        ["Global", "u32"]
+        ["CountTransferManager", "Counter"],
+        ["PercentageTransferManager", "Percentage"]
       ]
     },
     "RestrictionResult": {
@@ -1235,7 +1191,8 @@
         ["status", "InstructionStatus"],
         ["settlement_type", "SettlementType"],
         ["created_at", "Option<Moment>"],
-        ["valid_from", "Option<Moment>"]
+        ["trade_date", "Option<Moment>"],
+        ["value_date", "Option<Moment>"]
       ]
     },
     "Leg": {
@@ -1317,13 +1274,37 @@
         ["Specific", "IdentityId"]
       ]
     },
+    "FundraiserName": "String",
+    "FundraiserStatus": {
+      "type": "enum",
+      "type_mapping": [
+        ["Live", "Null"],
+        ["Frozen", "Null"],
+        ["Closed", "Null"]
+      ]
+    },
+    "FundraiserTier": {
+        "type": "struct",
+        "type_mapping": [
+          ["total", "Balance"],
+          ["price", "Balance"],
+          ["remaining", "Balance"]
+        ]
+    },
     "Fundraiser": {
       "type": "struct",
       "type_mapping": [
-        ["raise_token", "Ticker"],
-        ["remaining_amount", "Balance"],
-        ["price_per_token", "Balance"],
-        ["venue_id", "u64"]
+        ["creator", "IdentityId"],
+        ["offering_portfolio", "PortfolioId"],
+        ["offering_asset", "Ticker"],
+        ["raising_portfolio", "PortfolioId"],
+        ["raising_asset", "Ticker"],
+        ["tiers", "Vec<FundraiserTier>"],
+        ["venue_id", "u64"],
+        ["start", "Moment"],
+        ["end", "Option<Moment>"],
+        ["status", "FundraiserStatus"],
+        ["minimum_investment", "Balance"]
       ]
     },
     "VenueType": {
@@ -1364,7 +1345,7 @@
       "type": "enum",
       "value_list": [
         "PredictableBenefit",
-        "UnpredictableBenfit",
+        "UnpredictableBenefit",
         "IssuerNotice",
         "Reorganization",
         "Other"
@@ -1439,8 +1420,28 @@
         ["price", "Balance"]
       ]
     },
-    "CompactAssignments": "CompactAssignmentsFrom258",
-    "RefCount": "RefCount",
-    "secondary_key::api::LegacyPermissions": "LegacyPermissions"
+    "AssetMigrationError": {
+      "type": "enum",
+      "type_mapping": [
+        ["AssetDocumentFail", "(Ticker, DocumentId)"]
+      ]
+  },
+  "MigrationError": {
+    "type": "enum",
+    "type_mapping": [
+      ["DecodeKey", "Vec<u8>"],
+      ["Map", "AssetMigrationError"]
+    ]
+  },
+  "PermissionedIdentityPrefs": {
+    "type": "struct",
+    "type_mapping": [
+      ["intended_count", "u32"],
+      ["running_count", "u32"]
+    ]
+  },
+  "CompactAssignments": "CompactAssignmentsFrom258",
+  "RefCount": "RefCount",
+  "secondary_key::api::LegacyPermissions": "LegacyPermissions"
   }
 }
